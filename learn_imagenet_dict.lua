@@ -17,7 +17,7 @@ local AMax                  = infinity;
 local AMin                  = 0;
 local basePhase 	        = 2;
 local dictionarySize        = 1000;
-local displayMultiple       = 3;
+local displayMultiple       = 1;
 local displayPeriod         = 2000;
 local initFromCkpt          = true;
 local initFromFile          = false;
@@ -57,7 +57,7 @@ local model2ErrorWriteStep  = -1;
 local model2ReconWriteStep  = -1;
 local modelWriteStep        = checkpointPeriod;
 local numCheckpointsKept    = 2;
-local runNameSuffix         = "initial_training";
+local runNameSuffix         = "finetuning_lower_vthresh";
 
 
 -- run names and output paths
@@ -71,9 +71,8 @@ local outputPath            = runName .. "/run" .. runVersion .. "_" .. modelTyp
                                   timeConstantTau .. "_" .. "VThresh" ..
                                   VThresh .. "_" .. runNameSuffix;
 
-local initPath              = "imagenet_psx17_psy17_nbatch256_inH32_inW64_dsize1000/" ..
-                                  "run12_softThresh_LCA_Tau4000_training/" ..
-                                  "Checkpoints/Checkpoint00002000/";
+local initPath              = "imagenet_psx17_psy17_nbatch256_inH32_inW64_dsize1000_timeConstantTau4000/" ..
+                                  "run10_softThresh/Checkpoints/Checkpoint00008000/";
 
 
 
