@@ -1,0 +1,5 @@
+imagenet*/
+*.png
+*.jpg
+*.jpeg 
+*.txt
