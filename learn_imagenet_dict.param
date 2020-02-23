@@ -1,509 +1,873 @@
 debugParsing = true;
 HyPerCol "column" = {
-    deleteOlderCheckpoints = true;
-    writeTimescales = true;
-    errorOnNotANumber = false;
-    startTime = 0;
-    checkpointWrite = true;
-    randomSeed = 10000000;
-    stopTime = 10146000;
     dt = 1;
-    nx = 64;
-    verifyWrites = false;
     outputPath = "imagenet_psx17_psy17_inH32_inW64_dsize1000/run15_LCAsoftthresh_Tau3000_VThresh0.175_displayPeriod2000";
-    numCheckpointsKept = 2;
-    initializeFromCheckpointDir = "imagenet_psx17_psy17_inH32_inW64_dsize1000/run14_LCAsoftthresh_Tau3000_VThresh0.075_finetuning_lower_vthresh_displayPeriod2000/Checkpoints/Checkpoint00002000";
-    suppressNonplasticCheckpoints = false;
-    checkpointWriteDir = "imagenet_psx17_psy17_inH32_inW64_dsize1000/run15_LCAsoftthresh_Tau3000_VThresh0.175_displayPeriod2000/Checkpoints";
-    writeProgressToErr = true;
     checkpointWriteStepInterval = 2000;
-    checkpointWriteTriggerMode = "step";
-    ny = 32;
     printParamsFilename = "imagenet_psx17_psy17_inH32_inW64_dsize1000.params";
+    checkpointWrite = true;
+    errorOnNotANumber = false;
+    verifyWrites = false;
+    randomSeed = 10000000;
+    writeProgressToErr = true;
     nbatch = 256;
     progressInterval = 2000;
-};
-
-L2NormProbe "Frame7ReconErrorL2Probe" = {
-    probeOutputFile = "Frame7ReconErrorL2Probe.txt";
-    targetLayer = "Frame7ReconError";
-    energyProbe = "EnergyProbe";
-    textOutputFlag = true;
-    exponent = 2;
-    coefficient = 0.5;
-};
-
-L2NormProbe "Frame2ReconErrorL2Probe" = {
-    probeOutputFile = "Frame2ReconErrorL2Probe.txt";
-    targetLayer = "Frame2ReconError";
-    energyProbe = "EnergyProbe";
-    textOutputFlag = true;
-    exponent = 2;
-    coefficient = 0.5;
-};
-
-HyPerLayer "Frame4Recon" = {
-    valueBC = 0;
-    writeStep = -1;
-    nyScale = 1;
-    nxScale = 1;
-    phase = 4;
-    sparseLayer = false;
-    updateGpu = false;
-    initialWriteTime = -1;
-    nf = 1;
-    InitVType = "ZeroV";
-    mirrorBCflag = false;
-};
-
-MomentumConn "S1ToFrame4ReconError" = {
-    shrinkPatches = false;
-    initializeFromCheckpointFlag = true;
-    triggerLayerName = "Frame0";
-    sparseFraction = 0.9;
-    useMask = false;
-    keepKernelsSynchronized = true;
-    normalizeOnWeightUpdate = true;
-    delay = [0.0];
-    updateGSynFromPostPerspective = false;
-    rMinY = 0;
-    wMaxInit = 1.0;
-    receiveGpu = false;
-    triggerOffset = 1;
-    postLayerName = "Frame4ReconError";
-    numAxonalArbors = 1;
-    preLayerName = "S1";
-    nxp = 17;
-    nonnegativeConstraintFlag = false;
-    channelCode = -1;
-    sharedWeights = true;
-    convertRateToSpikeCount = false;
-    minL2NormTolerated = 0;
-    normalizeGroupName = "S1ToFrame0ReconError";
-    normalizeFromPostPerspective = false;
-    initialWriteTime = -1;
-    timeConstantTau = 100;
-    writeCompressedCheckpoints = false;
-    momentumDecay = 0;
-    strength = 1;
-    weightInitType = "UniformRandomWeight";
-    normalizeMethod = "normalizeGroup";
-    selfFlag = false;
-    wMinInit = -1.0;
-    dWMax = 0.1;
-    normalizeDw = true;
-    normalizeOnInitialize = true;
-    rMinX = 0;
-    momentumMethod = "viscosity";
-    pvpatchAccumulateType = "convolve";
-    writeStep = -1;
-    normalize_cutoff = 0;
-    normalizeArborsIndividually = false;
-    plasticityFlag = true;
-    nyp = 17;
-};
-
-IdentConn "Frame1ReconToFrame1ReconError" = {
-    postLayerName = "Frame1ReconError";
-    preLayerName = "Frame1Recon";
-    channelCode = 1;
-    delay = [0.0];
-};
-
-MomentumConn "S1ToFrame6ReconError" = {
-    shrinkPatches = false;
-    initializeFromCheckpointFlag = true;
-    triggerLayerName = "Frame0";
-    sparseFraction = 0.9;
-    useMask = false;
-    keepKernelsSynchronized = true;
-    normalizeOnWeightUpdate = true;
-    delay = [0.0];
-    updateGSynFromPostPerspective = false;
-    rMinY = 0;
-    wMaxInit = 1.0;
-    receiveGpu = false;
-    triggerOffset = 1;
-    postLayerName = "Frame6ReconError";
-    numAxonalArbors = 1;
-    preLayerName = "S1";
-    nxp = 17;
-    nonnegativeConstraintFlag = false;
-    channelCode = -1;
-    sharedWeights = true;
-    convertRateToSpikeCount = false;
-    minL2NormTolerated = 0;
-    normalizeGroupName = "S1ToFrame0ReconError";
-    normalizeFromPostPerspective = false;
-    initialWriteTime = -1;
-    timeConstantTau = 100;
-    writeCompressedCheckpoints = false;
-    momentumDecay = 0;
-    strength = 1;
-    weightInitType = "UniformRandomWeight";
-    normalizeMethod = "normalizeGroup";
-    selfFlag = false;
-    wMinInit = -1.0;
-    dWMax = 0.1;
-    normalizeDw = true;
-    normalizeOnInitialize = true;
-    rMinX = 0;
-    momentumMethod = "viscosity";
-    pvpatchAccumulateType = "convolve";
-    writeStep = -1;
-    normalize_cutoff = 0;
-    normalizeArborsIndividually = false;
-    plasticityFlag = true;
-    nyp = 17;
-};
-
-IdentConn "Frame3ToFrame3ReconError" = {
-    postLayerName = "Frame3ReconError";
-    preLayerName = "Frame3";
-    channelCode = 0;
-    delay = [0.0];
-};
-
-TransposeConn "Frame3ReconErrorToS1" = {
-    writeStep = -1;
-    receiveGpu = true;
-    channelCode = 0;
-    selfFlag = false;
-    convertRateToSpikeCount = false;
-    delay = [0.0];
-    postLayerName = "S1";
-    writeCompressedCheckpoints = false;
-    preLayerName = "Frame3ReconError";
-    pvpatchAccumulateType = "convolve";
-    originalConnName = "S1ToFrame3ReconError";
-    updateGSynFromPostPerspective = true;
-    gpuGroupIdx = -1;
-};
-
-HyPerLayer "Frame0ReconError" = {
-    valueBC = 0;
-    writeStep = -1;
-    nyScale = 1;
-    nxScale = 1;
-    phase = 2;
-    sparseLayer = false;
-    updateGpu = false;
-    initialWriteTime = -1;
-    nf = 1;
-    InitVType = "ZeroV";
-    mirrorBCflag = false;
-};
-
-IdentConn "Frame2ReconToFrame2ReconError" = {
-    postLayerName = "Frame2ReconError";
-    preLayerName = "Frame2Recon";
-    channelCode = 1;
-    delay = [0.0];
-};
-
-HyPerLayer "Frame5ReconError" = {
-    valueBC = 0;
-    writeStep = -1;
-    nyScale = 1;
-    nxScale = 1;
-    phase = 2;
-    sparseLayer = false;
-    updateGpu = false;
-    initialWriteTime = -1;
-    nf = 1;
-    InitVType = "ZeroV";
-    mirrorBCflag = false;
-};
-
-IdentConn "Frame3ReconToFrame3ReconError" = {
-    postLayerName = "Frame3ReconError";
-    preLayerName = "Frame3Recon";
-    channelCode = 1;
-    delay = [0.0];
-};
-
-HyPerLCALayer "S1" = {
-    valueBC = 0;
-    writeSparseValues = true;
-    nyScale = 1;
-    nxScale = 1;
-    VThresh = 0.175;
-    timeConstantTau = 3000;
-    initialWriteTime = 2000;
-    AMax = infinity;
-    mirrorBCflag = false;
-    valueV = 0.0;
-    writeStep = 2000;
-    selfInteract = true;
-    AMin = 0;
-    phase = 3;
-    sparseLayer = true;
-    updateGpu = true;
-    nf = 1000;
-    VWidth = infinity;
-    initializeFromCheckpointFlag = true;
-    AShift = 0;
-    InitVType = "ConstantV";
-    clearGSynInterval = 0;
-};
-
-HyPerLayer "Frame6ReconError" = {
-    valueBC = 0;
-    writeStep = -1;
-    nyScale = 1;
-    nxScale = 1;
-    phase = 2;
-    sparseLayer = false;
-    updateGpu = false;
-    initialWriteTime = -1;
-    nf = 1;
-    InitVType = "ZeroV";
-    mirrorBCflag = false;
+    initializeFromCheckpointDir = "imagenet_psx17_psy17_inH32_inW64_dsize1000/run14_LCAsoftthresh_Tau3000_VThresh0.075_finetuning_lower_vthresh_displayPeriod2000/Checkpoints/Checkpoint00002000";
+    writeTimescales = true;
+    suppressNonplasticCheckpoints = false;
+    ny = 32;
+    nx = 64;
+    checkpointWriteTriggerMode = "step";
+    startTime = 0;
+    numCheckpointsKept = 2;
+    checkpointWriteDir = "imagenet_psx17_psy17_inH32_inW64_dsize1000/run15_LCAsoftthresh_Tau3000_VThresh0.175_displayPeriod2000/Checkpoints";
+    deleteOlderCheckpoints = true;
+    stopTime = 10146000;
 };
 
 TransposeConn "Frame1ReconErrorToS1" = {
-    writeStep = -1;
-    receiveGpu = true;
+    writeCompressedCheckpoints = false;
     channelCode = 0;
+    postLayerName = "S1";
+    originalConnName = "S1ToFrame1ReconError";
+    delay = [0.0];
+    updateGSynFromPostPerspective = true;
+    writeStep = -1;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "Frame1ReconError";
     selfFlag = false;
     convertRateToSpikeCount = false;
-    delay = [0.0];
-    postLayerName = "S1";
-    writeCompressedCheckpoints = false;
-    preLayerName = "Frame1ReconError";
-    pvpatchAccumulateType = "convolve";
-    originalConnName = "S1ToFrame1ReconError";
-    updateGSynFromPostPerspective = true;
+    receiveGpu = true;
     gpuGroupIdx = -1;
 };
 
-L2NormProbe "Frame6ReconErrorL2Probe" = {
-    probeOutputFile = "Frame6ReconErrorL2Probe.txt";
-    targetLayer = "Frame6ReconError";
-    energyProbe = "EnergyProbe";
-    textOutputFlag = true;
-    exponent = 2;
-    coefficient = 0.5;
-};
-
 MomentumConn "S1ToFrame3ReconError" = {
-    shrinkPatches = false;
-    initializeFromCheckpointFlag = true;
-    triggerLayerName = "Frame0";
-    sparseFraction = 0.9;
-    useMask = false;
-    keepKernelsSynchronized = true;
-    normalizeOnWeightUpdate = true;
-    delay = [0.0];
-    updateGSynFromPostPerspective = false;
-    rMinY = 0;
-    wMaxInit = 1.0;
-    receiveGpu = false;
-    triggerOffset = 1;
+    normalizeArborsIndividually = false;
+    channelCode = -1;
+    normalizeFromPostPerspective = false;
+    nyp = 17;
+    normalize_cutoff = 0;
+    minL2NormTolerated = 0;
+    normalizeDw = true;
     postLayerName = "Frame3ReconError";
+    delay = [0.0];
+    triggerOffset = 1;
+    initialWriteTime = -1;
+    strength = 1;
+    writeStep = -1;
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = false;
+    writeCompressedCheckpoints = false;
+    wMaxInit = 1.0;
+    rMinX = 0;
+    shrinkPatches = false;
+    sparseFraction = 0.9;
+    normalizeGroupName = "S1ToFrame0ReconError";
+    normalizeOnWeightUpdate = true;
+    plasticityFlag = true;
+    nonnegativeConstraintFlag = false;
+    normalizeOnInitialize = true;
+    initializeFromCheckpointFlag = true;
     numAxonalArbors = 1;
+    triggerLayerName = "Frame0";
+    dWMax = 0.1;
+    sharedWeights = true;
+    normalizeMethod = "normalizeGroup";
+    momentumDecay = 0;
+    keepKernelsSynchronized = true;
+    timeConstantTau = 100;
+    useMask = false;
+    pvpatchAccumulateType = "convolve";
+    momentumMethod = "viscosity";
+    rMinY = 0;
+    weightInitType = "UniformRandomWeight";
     preLayerName = "S1";
     nxp = 17;
-    nonnegativeConstraintFlag = false;
-    channelCode = -1;
-    sharedWeights = true;
-    convertRateToSpikeCount = false;
-    minL2NormTolerated = 0;
-    normalizeGroupName = "S1ToFrame0ReconError";
-    normalizeFromPostPerspective = false;
-    initialWriteTime = -1;
-    timeConstantTau = 100;
-    writeCompressedCheckpoints = false;
-    momentumDecay = 0;
-    strength = 1;
-    weightInitType = "UniformRandomWeight";
-    normalizeMethod = "normalizeGroup";
-    selfFlag = false;
+    updateGSynFromPostPerspective = false;
     wMinInit = -1.0;
-    dWMax = 0.1;
-    normalizeDw = true;
-    normalizeOnInitialize = true;
-    rMinX = 0;
-    momentumMethod = "viscosity";
-    pvpatchAccumulateType = "convolve";
-    writeStep = -1;
-    normalize_cutoff = 0;
-    normalizeArborsIndividually = false;
-    plasticityFlag = true;
-    nyp = 17;
-};
-
-IdentConn "Frame8ToFrame8ReconError" = {
-    postLayerName = "Frame8ReconError";
-    preLayerName = "Frame8";
-    channelCode = 0;
-    delay = [0.0];
-};
-
-IdentConn "Frame4ReconToFrame4ReconError" = {
-    postLayerName = "Frame4ReconError";
-    preLayerName = "Frame4Recon";
-    channelCode = 1;
-    delay = [0.0];
 };
 
 HyPerLayer "Frame3Recon" = {
     valueBC = 0;
-    writeStep = -1;
-    nyScale = 1;
     nxScale = 1;
+    updateGpu = false;
+    nf = 1;
+    mirrorBCflag = false;
     phase = 4;
     sparseLayer = false;
-    updateGpu = false;
     initialWriteTime = -1;
-    nf = 1;
+    writeStep = -1;
+    nyScale = 1;
     InitVType = "ZeroV";
-    mirrorBCflag = false;
 };
 
-HyPerLayer "Frame5Recon" = {
+HyPerLayer "Frame6ReconError" = {
+    sparseLayer = false;
+    updateGpu = false;
+    nf = 1;
+    mirrorBCflag = false;
+    phase = 2;
+    nxScale = 1;
     valueBC = 0;
-    writeStep = -1;
     nyScale = 1;
-    nxScale = 1;
-    phase = 4;
-    sparseLayer = false;
-    updateGpu = false;
+    writeStep = -1;
     initialWriteTime = -1;
-    nf = 1;
     InitVType = "ZeroV";
-    mirrorBCflag = false;
 };
 
-MomentumConn "S1ToFrame2ReconError" = {
-    shrinkPatches = false;
-    initializeFromCheckpointFlag = true;
-    triggerLayerName = "Frame0";
-    sparseFraction = 0.9;
-    useMask = false;
-    keepKernelsSynchronized = true;
-    normalizeOnWeightUpdate = true;
+IdentConn "Frame5ToFrame5ReconError" = {
+    channelCode = 0;
+    preLayerName = "Frame5";
     delay = [0.0];
-    updateGSynFromPostPerspective = false;
-    rMinY = 0;
-    wMaxInit = 1.0;
-    receiveGpu = false;
-    triggerOffset = 1;
-    postLayerName = "Frame2ReconError";
-    numAxonalArbors = 1;
-    preLayerName = "S1";
-    nxp = 17;
-    nonnegativeConstraintFlag = false;
-    channelCode = -1;
-    sharedWeights = true;
-    convertRateToSpikeCount = false;
-    minL2NormTolerated = 0;
-    normalizeGroupName = "S1ToFrame0ReconError";
-    normalizeFromPostPerspective = false;
-    initialWriteTime = -1;
-    timeConstantTau = 100;
+    postLayerName = "Frame5ReconError";
+};
+
+TransposeConn "Frame6ReconErrorToS1" = {
     writeCompressedCheckpoints = false;
-    momentumDecay = 0;
-    strength = 1;
-    weightInitType = "UniformRandomWeight";
-    normalizeMethod = "normalizeGroup";
-    selfFlag = false;
-    wMinInit = -1.0;
-    dWMax = 0.1;
-    normalizeDw = true;
-    normalizeOnInitialize = true;
-    rMinX = 0;
-    momentumMethod = "viscosity";
-    pvpatchAccumulateType = "convolve";
-    writeStep = -1;
-    normalize_cutoff = 0;
-    normalizeArborsIndividually = false;
-    plasticityFlag = true;
-    nyp = 17;
-};
-
-IdentConn "Frame0ToFrame0ReconError" = {
-    postLayerName = "Frame0ReconError";
-    preLayerName = "Frame0";
     channelCode = 0;
-    delay = [0.0];
-};
-
-TransposeConn "Frame0ReconErrorToS1" = {
-    writeStep = -1;
-    receiveGpu = true;
-    channelCode = 0;
-    selfFlag = false;
-    convertRateToSpikeCount = false;
-    delay = [0.0];
     postLayerName = "S1";
-    writeCompressedCheckpoints = false;
-    preLayerName = "Frame0ReconError";
-    pvpatchAccumulateType = "convolve";
-    originalConnName = "S1ToFrame0ReconError";
+    originalConnName = "S1ToFrame6ReconError";
+    delay = [0.0];
     updateGSynFromPostPerspective = true;
+    writeStep = -1;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "Frame6ReconError";
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = true;
     gpuGroupIdx = -1;
 };
 
-CloneConn "S1ToFrame2Recon" = {
+MomentumConn "S1ToFrame4ReconError" = {
+    normalizeArborsIndividually = false;
+    channelCode = -1;
+    normalizeFromPostPerspective = false;
+    nyp = 17;
+    normalize_cutoff = 0;
+    minL2NormTolerated = 0;
+    normalizeDw = true;
+    postLayerName = "Frame4ReconError";
+    delay = [0.0];
+    triggerOffset = 1;
+    initialWriteTime = -1;
+    strength = 1;
     writeStep = -1;
-    receiveGpu = false;
-    channelCode = 0;
     selfFlag = false;
     convertRateToSpikeCount = false;
-    postLayerName = "Frame2Recon";
+    receiveGpu = false;
     writeCompressedCheckpoints = false;
-    preLayerName = "S1";
-    delay = [0.0];
-    originalConnName = "S1ToFrame2ReconError";
+    wMaxInit = 1.0;
+    rMinX = 0;
+    shrinkPatches = false;
+    sparseFraction = 0.9;
+    normalizeGroupName = "S1ToFrame0ReconError";
+    normalizeOnWeightUpdate = true;
+    plasticityFlag = true;
+    nonnegativeConstraintFlag = false;
+    normalizeOnInitialize = true;
+    initializeFromCheckpointFlag = true;
+    numAxonalArbors = 1;
+    triggerLayerName = "Frame0";
+    dWMax = 0.1;
+    sharedWeights = true;
+    normalizeMethod = "normalizeGroup";
+    momentumDecay = 0;
+    keepKernelsSynchronized = true;
+    timeConstantTau = 100;
+    useMask = false;
     pvpatchAccumulateType = "convolve";
+    momentumMethod = "viscosity";
+    rMinY = 0;
+    weightInitType = "UniformRandomWeight";
+    preLayerName = "S1";
+    nxp = 17;
     updateGSynFromPostPerspective = false;
+    wMinInit = -1.0;
 };
 
-HyPerLayer "Frame3ReconError" = {
-    valueBC = 0;
-    writeStep = -1;
-    nyScale = 1;
-    nxScale = 1;
-    phase = 2;
+HyPerLayer "Frame0ReconError" = {
     sparseLayer = false;
     updateGpu = false;
-    initialWriteTime = -1;
     nf = 1;
-    InitVType = "ZeroV";
     mirrorBCflag = false;
+    phase = 2;
+    nxScale = 1;
+    valueBC = 0;
+    nyScale = 1;
+    writeStep = -1;
+    initialWriteTime = -1;
+    InitVType = "ZeroV";
+};
+
+HyPerLayer "Frame0Recon" = {
+    valueBC = 0;
+    nxScale = 1;
+    updateGpu = false;
+    nf = 1;
+    mirrorBCflag = false;
+    phase = 4;
+    sparseLayer = false;
+    initialWriteTime = -1;
+    writeStep = -1;
+    nyScale = 1;
+    InitVType = "ZeroV";
+};
+
+MomentumConn "S1ToFrame1ReconError" = {
+    normalizeArborsIndividually = false;
+    channelCode = -1;
+    normalizeFromPostPerspective = false;
+    nyp = 17;
+    normalize_cutoff = 0;
+    minL2NormTolerated = 0;
+    normalizeDw = true;
+    postLayerName = "Frame1ReconError";
+    delay = [0.0];
+    triggerOffset = 1;
+    initialWriteTime = -1;
+    strength = 1;
+    writeStep = -1;
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = false;
+    writeCompressedCheckpoints = false;
+    wMaxInit = 1.0;
+    rMinX = 0;
+    shrinkPatches = false;
+    sparseFraction = 0.9;
+    normalizeGroupName = "S1ToFrame0ReconError";
+    normalizeOnWeightUpdate = true;
+    plasticityFlag = true;
+    nonnegativeConstraintFlag = false;
+    normalizeOnInitialize = true;
+    initializeFromCheckpointFlag = true;
+    numAxonalArbors = 1;
+    triggerLayerName = "Frame0";
+    dWMax = 0.1;
+    sharedWeights = true;
+    normalizeMethod = "normalizeGroup";
+    momentumDecay = 0;
+    keepKernelsSynchronized = true;
+    timeConstantTau = 100;
+    useMask = false;
+    pvpatchAccumulateType = "convolve";
+    momentumMethod = "viscosity";
+    rMinY = 0;
+    weightInitType = "UniformRandomWeight";
+    preLayerName = "S1";
+    nxp = 17;
+    updateGSynFromPostPerspective = false;
+    wMinInit = -1.0;
+};
+
+MomentumConn "S1ToFrame6ReconError" = {
+    normalizeArborsIndividually = false;
+    channelCode = -1;
+    normalizeFromPostPerspective = false;
+    nyp = 17;
+    normalize_cutoff = 0;
+    minL2NormTolerated = 0;
+    normalizeDw = true;
+    postLayerName = "Frame6ReconError";
+    delay = [0.0];
+    triggerOffset = 1;
+    initialWriteTime = -1;
+    strength = 1;
+    writeStep = -1;
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = false;
+    writeCompressedCheckpoints = false;
+    wMaxInit = 1.0;
+    rMinX = 0;
+    shrinkPatches = false;
+    sparseFraction = 0.9;
+    normalizeGroupName = "S1ToFrame0ReconError";
+    normalizeOnWeightUpdate = true;
+    plasticityFlag = true;
+    nonnegativeConstraintFlag = false;
+    normalizeOnInitialize = true;
+    initializeFromCheckpointFlag = true;
+    numAxonalArbors = 1;
+    triggerLayerName = "Frame0";
+    dWMax = 0.1;
+    sharedWeights = true;
+    normalizeMethod = "normalizeGroup";
+    momentumDecay = 0;
+    keepKernelsSynchronized = true;
+    timeConstantTau = 100;
+    useMask = false;
+    pvpatchAccumulateType = "convolve";
+    momentumMethod = "viscosity";
+    rMinY = 0;
+    weightInitType = "UniformRandomWeight";
+    preLayerName = "S1";
+    nxp = 17;
+    updateGSynFromPostPerspective = false;
+    wMinInit = -1.0;
+};
+
+IdentConn "Frame6ToFrame6ReconError" = {
+    channelCode = 0;
+    preLayerName = "Frame6";
+    delay = [0.0];
+    postLayerName = "Frame6ReconError";
+};
+
+L2NormProbe "Frame0ReconErrorL2Probe" = {
+    targetLayer = "Frame0ReconError";
+    textOutputFlag = true;
+    coefficient = 0.5;
+    probeOutputFile = "Frame0ReconErrorL2Probe.txt";
+    exponent = 2;
+    energyProbe = "EnergyProbe";
+};
+
+TransposeConn "Frame3ReconErrorToS1" = {
+    writeCompressedCheckpoints = false;
+    channelCode = 0;
+    postLayerName = "S1";
+    originalConnName = "S1ToFrame3ReconError";
+    delay = [0.0];
+    updateGSynFromPostPerspective = true;
+    writeStep = -1;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "Frame3ReconError";
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = true;
+    gpuGroupIdx = -1;
+};
+
+HyPerLayer "Frame1Recon" = {
+    valueBC = 0;
+    nxScale = 1;
+    updateGpu = false;
+    nf = 1;
+    mirrorBCflag = false;
+    phase = 4;
+    sparseLayer = false;
+    initialWriteTime = -1;
+    writeStep = -1;
+    nyScale = 1;
+    InitVType = "ZeroV";
+};
+
+CloneConn "S1ToFrame6Recon" = {
+    writeCompressedCheckpoints = false;
+    channelCode = 0;
+    postLayerName = "Frame6Recon";
+    delay = [0.0];
+    updateGSynFromPostPerspective = false;
+    writeStep = -1;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "S1";
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = false;
+    originalConnName = "S1ToFrame6ReconError";
+};
+
+IdentConn "Frame0ToFrame0ReconError" = {
+    channelCode = 0;
+    preLayerName = "Frame0";
+    delay = [0.0];
+    postLayerName = "Frame0ReconError";
+};
+
+TransposeConn "Frame5ReconErrorToS1" = {
+    writeCompressedCheckpoints = false;
+    channelCode = 0;
+    postLayerName = "S1";
+    originalConnName = "S1ToFrame5ReconError";
+    delay = [0.0];
+    updateGSynFromPostPerspective = true;
+    writeStep = -1;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "Frame5ReconError";
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = true;
+    gpuGroupIdx = -1;
+};
+
+IdentConn "Frame2ToFrame2ReconError" = {
+    channelCode = 0;
+    preLayerName = "Frame2";
+    delay = [0.0];
+    postLayerName = "Frame2ReconError";
+};
+
+MomentumConn "S1ToFrame0ReconError" = {
+    normalizeArborsIndividually = false;
+    channelCode = -1;
+    normalizeFromPostPerspective = false;
+    nyp = 17;
+    normalize_cutoff = 0;
+    minL2NormTolerated = 0;
+    normalizeDw = true;
+    postLayerName = "Frame0ReconError";
+    delay = [0.0];
+    triggerOffset = 1;
+    initialWriteTime = -1;
+    strength = 1;
+    writeStep = -1;
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = false;
+    writeCompressedCheckpoints = false;
+    wMaxInit = 1.0;
+    rMinX = 0;
+    shrinkPatches = false;
+    sparseFraction = 0.9;
+    normalizeOnWeightUpdate = true;
+    plasticityFlag = true;
+    nonnegativeConstraintFlag = false;
+    normalizeOnInitialize = true;
+    initializeFromCheckpointFlag = true;
+    numAxonalArbors = 1;
+    triggerLayerName = "Frame0";
+    dWMax = 0.1;
+    sharedWeights = true;
+    normalizeMethod = "normalizeL2";
+    momentumDecay = 0;
+    keepKernelsSynchronized = true;
+    timeConstantTau = 100;
+    useMask = false;
+    pvpatchAccumulateType = "convolve";
+    momentumMethod = "viscosity";
+    rMinY = 0;
+    weightInitType = "UniformRandomWeight";
+    preLayerName = "S1";
+    nxp = 17;
+    updateGSynFromPostPerspective = false;
+    wMinInit = -1.0;
+};
+
+ImageLayer "Frame2" = {
+    padValue = 0;
+    useInputBCflag = false;
+    nxScale = 1;
+    inverseFlag = false;
+    updateGpu = false;
+    start_frame_index = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
+    phase = 1;
+    resetToStartOnLoop = false;
+    offsetY = 0;
+    nyScale = 1;
+    sparseLayer = false;
+    autoResizeFlag = true;
+    initializeFromCheckpointFlag = false;
+    batchMethod = "byList";
+    displayPeriod = 2000;
+    offsetAnchor = "cc";
+    offsetX = 0;
+    inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
+    aspectRatioAdjustment = "crop";
+    writeStep = -1;
+    interpolationMethod = "bicubic";
+    mirrorBCflag = true;
+    writeFrameToTimestamp = true;
+    initialWriteTime = -1;
+    jitterFlag = 0;
+    normalizeLuminanceFlag = true;
+    writeImages = 0;
+    nf = 1;
+    normalizeStdDev = true;
 };
 
 ImageLayer "Frame0" = {
-    offsetY = 0;
-    batchMethod = "byList";
-    initializeFromCheckpointFlag = false;
-    nyScale = 1;
-    nxScale = 1;
     padValue = 0;
-    inverseFlag = false;
-    resetToStartOnLoop = false;
     useInputBCflag = false;
-    initialWriteTime = -1;
-    nf = 1;
-    offsetX = 0;
-    writeImages = 0;
-    mirrorBCflag = true;
-    autoResizeFlag = true;
-    normalizeLuminanceFlag = true;
-    writeStep = -1;
-    offsetAnchor = "cc";
-    jitterFlag = 0;
+    nxScale = 1;
+    inverseFlag = false;
+    updateGpu = false;
     start_frame_index = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
     phase = 1;
+    resetToStartOnLoop = false;
+    offsetY = 0;
+    nyScale = 1;
+    sparseLayer = false;
+    autoResizeFlag = true;
+    initializeFromCheckpointFlag = false;
+    batchMethod = "byList";
+    displayPeriod = 2000;
+    offsetAnchor = "cc";
+    offsetX = 0;
+    inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
+    aspectRatioAdjustment = "crop";
+    writeStep = -1;
+    interpolationMethod = "bicubic";
+    mirrorBCflag = true;
+    writeFrameToTimestamp = true;
+    initialWriteTime = -1;
+    jitterFlag = 0;
+    normalizeLuminanceFlag = true;
+    writeImages = 0;
+    nf = 1;
+    normalizeStdDev = true;
+};
+
+HyPerLayer "Frame4Recon" = {
+    valueBC = 0;
+    nxScale = 1;
+    updateGpu = false;
+    nf = 1;
+    mirrorBCflag = false;
+    phase = 4;
+    sparseLayer = false;
+    initialWriteTime = -1;
+    writeStep = -1;
+    nyScale = 1;
+    InitVType = "ZeroV";
+};
+
+CloneConn "S1ToFrame5Recon" = {
+    writeCompressedCheckpoints = false;
+    channelCode = 0;
+    postLayerName = "Frame5Recon";
+    delay = [0.0];
+    updateGSynFromPostPerspective = false;
+    writeStep = -1;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "S1";
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = false;
+    originalConnName = "S1ToFrame5ReconError";
+};
+
+CloneConn "S1ToFrame7Recon" = {
+    writeCompressedCheckpoints = false;
+    channelCode = 0;
+    postLayerName = "Frame7Recon";
+    delay = [0.0];
+    updateGSynFromPostPerspective = false;
+    writeStep = -1;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "S1";
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = false;
+    originalConnName = "S1ToFrame7ReconError";
+};
+
+IdentConn "Frame6ReconToFrame6ReconError" = {
+    channelCode = 1;
+    preLayerName = "Frame6Recon";
+    delay = [0.0];
+    postLayerName = "Frame6ReconError";
+};
+
+L2NormProbe "Frame3ReconErrorL2Probe" = {
+    targetLayer = "Frame3ReconError";
+    textOutputFlag = true;
+    coefficient = 0.5;
+    probeOutputFile = "Frame3ReconErrorL2Probe.txt";
+    exponent = 2;
+    energyProbe = "EnergyProbe";
+};
+
+TransposeConn "Frame2ReconErrorToS1" = {
+    writeCompressedCheckpoints = false;
+    channelCode = 0;
+    postLayerName = "S1";
+    originalConnName = "S1ToFrame2ReconError";
+    delay = [0.0];
+    updateGSynFromPostPerspective = true;
+    writeStep = -1;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "Frame2ReconError";
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = true;
+    gpuGroupIdx = -1;
+};
+
+L2NormProbe "Frame7ReconErrorL2Probe" = {
+    targetLayer = "Frame7ReconError";
+    textOutputFlag = true;
+    coefficient = 0.5;
+    probeOutputFile = "Frame7ReconErrorL2Probe.txt";
+    exponent = 2;
+    energyProbe = "EnergyProbe";
+};
+
+IdentConn "Frame3ToFrame3ReconError" = {
+    channelCode = 0;
+    preLayerName = "Frame3";
+    delay = [0.0];
+    postLayerName = "Frame3ReconError";
+};
+
+MomentumConn "S1ToFrame2ReconError" = {
+    normalizeArborsIndividually = false;
+    channelCode = -1;
+    normalizeFromPostPerspective = false;
+    nyp = 17;
+    normalize_cutoff = 0;
+    minL2NormTolerated = 0;
+    normalizeDw = true;
+    postLayerName = "Frame2ReconError";
+    delay = [0.0];
+    triggerOffset = 1;
+    initialWriteTime = -1;
+    strength = 1;
+    writeStep = -1;
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = false;
+    writeCompressedCheckpoints = false;
+    wMaxInit = 1.0;
+    rMinX = 0;
+    shrinkPatches = false;
+    sparseFraction = 0.9;
+    normalizeGroupName = "S1ToFrame0ReconError";
+    normalizeOnWeightUpdate = true;
+    plasticityFlag = true;
+    nonnegativeConstraintFlag = false;
+    normalizeOnInitialize = true;
+    initializeFromCheckpointFlag = true;
+    numAxonalArbors = 1;
+    triggerLayerName = "Frame0";
+    dWMax = 0.1;
+    sharedWeights = true;
+    normalizeMethod = "normalizeGroup";
+    momentumDecay = 0;
+    keepKernelsSynchronized = true;
+    timeConstantTau = 100;
+    useMask = false;
+    pvpatchAccumulateType = "convolve";
+    momentumMethod = "viscosity";
+    rMinY = 0;
+    weightInitType = "UniformRandomWeight";
+    preLayerName = "S1";
+    nxp = 17;
+    updateGSynFromPostPerspective = false;
+    wMinInit = -1.0;
+};
+
+ImageLayer "Frame1" = {
+    padValue = 0;
+    useInputBCflag = false;
+    nxScale = 1;
+    inverseFlag = false;
+    updateGpu = false;
+    start_frame_index = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+    phase = 1;
+    resetToStartOnLoop = false;
+    offsetY = 0;
+    nyScale = 1;
+    sparseLayer = false;
+    autoResizeFlag = true;
+    initializeFromCheckpointFlag = false;
+    batchMethod = "byList";
+    displayPeriod = 2000;
+    offsetAnchor = "cc";
+    offsetX = 0;
+    inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
+    aspectRatioAdjustment = "crop";
+    writeStep = -1;
+    interpolationMethod = "bicubic";
+    mirrorBCflag = true;
+    writeFrameToTimestamp = true;
+    initialWriteTime = -1;
+    jitterFlag = 0;
+    normalizeLuminanceFlag = true;
+    writeImages = 0;
+    nf = 1;
+    normalizeStdDev = true;
+};
+
+ImageLayer "Frame6" = {
+    padValue = 0;
+    useInputBCflag = false;
+    nxScale = 1;
+    inverseFlag = false;
+    updateGpu = false;
+    start_frame_index = [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6];
+    phase = 1;
+    resetToStartOnLoop = false;
+    offsetY = 0;
+    nyScale = 1;
+    sparseLayer = false;
+    autoResizeFlag = true;
+    initializeFromCheckpointFlag = false;
+    batchMethod = "byList";
+    displayPeriod = 2000;
+    offsetAnchor = "cc";
+    offsetX = 0;
+    inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
+    aspectRatioAdjustment = "crop";
+    writeStep = -1;
+    interpolationMethod = "bicubic";
+    mirrorBCflag = true;
+    writeFrameToTimestamp = true;
+    initialWriteTime = -1;
+    jitterFlag = 0;
+    normalizeLuminanceFlag = true;
+    writeImages = 0;
+    nf = 1;
+    normalizeStdDev = true;
+};
+
+ImageLayer "Frame4" = {
+    padValue = 0;
+    useInputBCflag = false;
+    nxScale = 1;
+    inverseFlag = false;
+    updateGpu = false;
+    start_frame_index = [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4];
+    phase = 1;
+    resetToStartOnLoop = false;
+    offsetY = 0;
+    nyScale = 1;
+    sparseLayer = false;
+    autoResizeFlag = true;
+    initializeFromCheckpointFlag = false;
+    batchMethod = "byList";
+    displayPeriod = 2000;
+    offsetAnchor = "cc";
+    offsetX = 0;
+    inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
+    aspectRatioAdjustment = "crop";
+    writeStep = -1;
+    interpolationMethod = "bicubic";
+    mirrorBCflag = true;
+    writeFrameToTimestamp = true;
+    initialWriteTime = -1;
+    jitterFlag = 0;
+    normalizeLuminanceFlag = true;
+    writeImages = 0;
+    nf = 1;
+    normalizeStdDev = true;
+};
+
+TransposeConn "Frame4ReconErrorToS1" = {
+    writeCompressedCheckpoints = false;
+    channelCode = 0;
+    postLayerName = "S1";
+    originalConnName = "S1ToFrame4ReconError";
+    delay = [0.0];
+    updateGSynFromPostPerspective = true;
+    writeStep = -1;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "Frame4ReconError";
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = true;
+    gpuGroupIdx = -1;
+};
+
+ImageLayer "Frame7" = {
+    padValue = 0;
+    useInputBCflag = false;
+    nxScale = 1;
+    inverseFlag = false;
+    updateGpu = false;
+    start_frame_index = [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7];
+    phase = 1;
+    resetToStartOnLoop = false;
+    offsetY = 0;
+    nyScale = 1;
+    sparseLayer = false;
+    autoResizeFlag = true;
+    initializeFromCheckpointFlag = false;
+    batchMethod = "byList";
+    displayPeriod = 2000;
+    offsetAnchor = "cc";
+    offsetX = 0;
+    inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
+    aspectRatioAdjustment = "crop";
+    writeStep = -1;
+    interpolationMethod = "bicubic";
+    mirrorBCflag = true;
+    writeFrameToTimestamp = true;
+    initialWriteTime = -1;
+    jitterFlag = 0;
+    normalizeLuminanceFlag = true;
+    writeImages = 0;
+    nf = 1;
+    normalizeStdDev = true;
+};
+
+CloneConn "S1ToFrame4Recon" = {
+    writeCompressedCheckpoints = false;
+    channelCode = 0;
+    postLayerName = "Frame4Recon";
+    delay = [0.0];
+    updateGSynFromPostPerspective = false;
+    writeStep = -1;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "S1";
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = false;
+    originalConnName = "S1ToFrame4ReconError";
+};
+
+HyPerLayer "Frame2Recon" = {
+    valueBC = 0;
+    nxScale = 1;
+    updateGpu = false;
+    nf = 1;
+    mirrorBCflag = false;
+    phase = 4;
+    sparseLayer = false;
+    initialWriteTime = -1;
+    writeStep = -1;
+    nyScale = 1;
+    InitVType = "ZeroV";
+};
+
+HyPerLayer "Frame2ReconError" = {
     sparseLayer = false;
     updateGpu = false;
-    displayPeriod = 2000;
-    inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
-    writeFrameToTimestamp = true;
-    aspectRatioAdjustment = "crop";
-    interpolationMethod = "bicubic";
-    normalizeStdDev = true;
+    nf = 1;
+    mirrorBCflag = false;
+    phase = 2;
+    nxScale = 1;
+    valueBC = 0;
+    nyScale = 1;
+    writeStep = -1;
+    initialWriteTime = -1;
+    InitVType = "ZeroV";
+};
+
+HyPerLayer "Frame1ReconError" = {
+    sparseLayer = false;
+    updateGpu = false;
+    nf = 1;
+    mirrorBCflag = false;
+    phase = 2;
+    nxScale = 1;
+    valueBC = 0;
+    nyScale = 1;
+    writeStep = -1;
+    initialWriteTime = -1;
+    InitVType = "ZeroV";
+};
+
+CloneConn "S1ToFrame2Recon" = {
+    writeCompressedCheckpoints = false;
+    channelCode = 0;
+    postLayerName = "Frame2Recon";
+    delay = [0.0];
+    updateGSynFromPostPerspective = false;
+    writeStep = -1;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "S1";
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = false;
+    originalConnName = "S1ToFrame2ReconError";
+};
+
+IdentConn "Frame5ReconToFrame5ReconError" = {
+    channelCode = 1;
+    preLayerName = "Frame5Recon";
+    delay = [0.0];
+    postLayerName = "Frame5ReconError";
 };
 
 ColumnEnergyProbe "EnergyProbe" = {
@@ -511,1008 +875,644 @@ ColumnEnergyProbe "EnergyProbe" = {
     probeOutputFile = "EnergyProbe.txt";
 };
 
-LogTimeScaleProbe "AdaptiveTimeScales" = {
-    baseMin = 1.0;
-    triggerLayerName = "Frame0";
-    baseMax = 1.1;
-    textOutputFlag = true;
-    targetName = "EnergyProbe";
-    triggerOffset = 0;
-    logSlope = 0.01;
-    growthFactor = 0.025;
-    tauFactor = 0.025;
-    probeOutputFile = "AdaptiveTimeScales.txt";
-    logThresh = 10.0;
-};
-
-IdentConn "Frame0ReconToFrame0ReconError" = {
-    postLayerName = "Frame0ReconError";
-    preLayerName = "Frame0Recon";
-    channelCode = 1;
-    delay = [0.0];
-};
-
-CloneConn "S1ToFrame7Recon" = {
-    writeStep = -1;
-    receiveGpu = false;
-    channelCode = 0;
-    selfFlag = false;
-    convertRateToSpikeCount = false;
-    postLayerName = "Frame7Recon";
-    writeCompressedCheckpoints = false;
-    preLayerName = "S1";
-    delay = [0.0];
-    originalConnName = "S1ToFrame7ReconError";
-    pvpatchAccumulateType = "convolve";
-    updateGSynFromPostPerspective = false;
-};
-
-HyPerLayer "Frame7Recon" = {
-    valueBC = 0;
-    writeStep = -1;
-    nyScale = 1;
-    nxScale = 1;
-    phase = 4;
-    sparseLayer = false;
-    updateGpu = false;
-    initialWriteTime = -1;
-    nf = 1;
-    InitVType = "ZeroV";
-    mirrorBCflag = false;
-};
-
-ImageLayer "Frame7" = {
-    offsetY = 0;
-    batchMethod = "byList";
-    initializeFromCheckpointFlag = false;
-    nyScale = 1;
-    nxScale = 1;
-    padValue = 0;
-    inverseFlag = false;
-    resetToStartOnLoop = false;
-    useInputBCflag = false;
-    initialWriteTime = -1;
-    nf = 1;
-    offsetX = 0;
-    writeImages = 0;
-    mirrorBCflag = true;
-    autoResizeFlag = true;
-    normalizeLuminanceFlag = true;
-    writeStep = -1;
-    offsetAnchor = "cc";
-    jitterFlag = 0;
-    start_frame_index = [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7];
-    phase = 1;
-    sparseLayer = false;
-    updateGpu = false;
-    displayPeriod = 2000;
-    inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
-    writeFrameToTimestamp = true;
-    aspectRatioAdjustment = "crop";
-    interpolationMethod = "bicubic";
-    normalizeStdDev = true;
-};
-
-L2NormProbe "Frame0ReconErrorL2Probe" = {
-    probeOutputFile = "Frame0ReconErrorL2Probe.txt";
-    targetLayer = "Frame0ReconError";
-    energyProbe = "EnergyProbe";
-    textOutputFlag = true;
-    exponent = 2;
-    coefficient = 0.5;
-};
-
-IdentConn "Frame4ToFrame4ReconError" = {
-    postLayerName = "Frame4ReconError";
-    preLayerName = "Frame4";
-    channelCode = 0;
-    delay = [0.0];
-};
-
-HyPerLayer "Frame8Recon" = {
-    valueBC = 0;
-    writeStep = -1;
-    nyScale = 1;
-    nxScale = 1;
-    phase = 4;
-    sparseLayer = false;
-    updateGpu = false;
-    initialWriteTime = -1;
-    nf = 1;
-    InitVType = "ZeroV";
-    mirrorBCflag = false;
-};
-
-CloneConn "S1ToFrame6Recon" = {
-    writeStep = -1;
-    receiveGpu = false;
-    channelCode = 0;
-    selfFlag = false;
-    convertRateToSpikeCount = false;
-    postLayerName = "Frame6Recon";
-    writeCompressedCheckpoints = false;
-    preLayerName = "S1";
-    delay = [0.0];
-    originalConnName = "S1ToFrame6ReconError";
-    pvpatchAccumulateType = "convolve";
-    updateGSynFromPostPerspective = false;
-};
-
-L2NormProbe "Frame3ReconErrorL2Probe" = {
-    probeOutputFile = "Frame3ReconErrorL2Probe.txt";
-    targetLayer = "Frame3ReconError";
-    energyProbe = "EnergyProbe";
-    textOutputFlag = true;
-    exponent = 2;
-    coefficient = 0.5;
-};
-
-ImageLayer "Frame1" = {
-    offsetY = 0;
-    batchMethod = "byList";
-    initializeFromCheckpointFlag = false;
-    nyScale = 1;
-    nxScale = 1;
-    padValue = 0;
-    inverseFlag = false;
-    resetToStartOnLoop = false;
-    useInputBCflag = false;
-    initialWriteTime = -1;
-    nf = 1;
-    offsetX = 0;
-    writeImages = 0;
-    mirrorBCflag = true;
-    autoResizeFlag = true;
-    normalizeLuminanceFlag = true;
-    writeStep = -1;
-    offsetAnchor = "cc";
-    jitterFlag = 0;
-    start_frame_index = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
-    phase = 1;
-    sparseLayer = false;
-    updateGpu = false;
-    displayPeriod = 2000;
-    inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
-    writeFrameToTimestamp = true;
-    aspectRatioAdjustment = "crop";
-    interpolationMethod = "bicubic";
-    normalizeStdDev = true;
-};
-
-ImageLayer "Frame3" = {
-    offsetY = 0;
-    batchMethod = "byList";
-    initializeFromCheckpointFlag = false;
-    nyScale = 1;
-    nxScale = 1;
-    padValue = 0;
-    inverseFlag = false;
-    resetToStartOnLoop = false;
-    useInputBCflag = false;
-    initialWriteTime = -1;
-    nf = 1;
-    offsetX = 0;
-    writeImages = 0;
-    mirrorBCflag = true;
-    autoResizeFlag = true;
-    normalizeLuminanceFlag = true;
-    writeStep = -1;
-    offsetAnchor = "cc";
-    jitterFlag = 0;
-    start_frame_index = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3];
-    phase = 1;
-    sparseLayer = false;
-    updateGpu = false;
-    displayPeriod = 2000;
-    inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
-    writeFrameToTimestamp = true;
-    aspectRatioAdjustment = "crop";
-    interpolationMethod = "bicubic";
-    normalizeStdDev = true;
-};
-
-ImageLayer "Frame8" = {
-    offsetY = 0;
-    batchMethod = "byList";
-    initializeFromCheckpointFlag = false;
-    nyScale = 1;
-    nxScale = 1;
-    padValue = 0;
-    inverseFlag = false;
-    resetToStartOnLoop = false;
-    useInputBCflag = false;
-    initialWriteTime = -1;
-    nf = 1;
-    offsetX = 0;
-    writeImages = 0;
-    mirrorBCflag = true;
-    autoResizeFlag = true;
-    normalizeLuminanceFlag = true;
-    writeStep = -1;
-    offsetAnchor = "cc";
-    jitterFlag = 0;
-    start_frame_index = [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8];
-    phase = 1;
-    sparseLayer = false;
-    updateGpu = false;
-    displayPeriod = 2000;
-    inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
-    writeFrameToTimestamp = true;
-    aspectRatioAdjustment = "crop";
-    interpolationMethod = "bicubic";
-    normalizeStdDev = true;
-};
-
-CloneConn "S1ToFrame5Recon" = {
-    writeStep = -1;
-    receiveGpu = false;
-    channelCode = 0;
-    selfFlag = false;
-    convertRateToSpikeCount = false;
-    postLayerName = "Frame5Recon";
-    writeCompressedCheckpoints = false;
-    preLayerName = "S1";
-    delay = [0.0];
-    originalConnName = "S1ToFrame5ReconError";
-    pvpatchAccumulateType = "convolve";
-    updateGSynFromPostPerspective = false;
-};
-
 MomentumConn "S1ToFrame8ReconError" = {
-    shrinkPatches = false;
-    initializeFromCheckpointFlag = true;
-    triggerLayerName = "Frame0";
-    sparseFraction = 0.9;
-    useMask = false;
-    keepKernelsSynchronized = true;
-    normalizeOnWeightUpdate = true;
-    delay = [0.0];
-    updateGSynFromPostPerspective = false;
-    rMinY = 0;
-    wMaxInit = 1.0;
-    receiveGpu = false;
-    triggerOffset = 1;
+    normalizeArborsIndividually = false;
+    channelCode = -1;
+    normalizeFromPostPerspective = false;
+    nyp = 17;
+    normalize_cutoff = 0;
+    minL2NormTolerated = 0;
+    normalizeDw = true;
     postLayerName = "Frame8ReconError";
+    delay = [0.0];
+    triggerOffset = 1;
+    initialWriteTime = -1;
+    strength = 1;
+    writeStep = -1;
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = false;
+    writeCompressedCheckpoints = false;
+    wMaxInit = 1.0;
+    rMinX = 0;
+    shrinkPatches = false;
+    sparseFraction = 0.9;
+    normalizeGroupName = "S1ToFrame0ReconError";
+    normalizeOnWeightUpdate = true;
+    plasticityFlag = true;
+    nonnegativeConstraintFlag = false;
+    normalizeOnInitialize = true;
+    initializeFromCheckpointFlag = true;
     numAxonalArbors = 1;
+    triggerLayerName = "Frame0";
+    dWMax = 0.1;
+    sharedWeights = true;
+    normalizeMethod = "normalizeGroup";
+    momentumDecay = 0;
+    keepKernelsSynchronized = true;
+    timeConstantTau = 100;
+    useMask = false;
+    pvpatchAccumulateType = "convolve";
+    momentumMethod = "viscosity";
+    rMinY = 0;
+    weightInitType = "UniformRandomWeight";
     preLayerName = "S1";
     nxp = 17;
-    nonnegativeConstraintFlag = false;
-    channelCode = -1;
-    sharedWeights = true;
-    convertRateToSpikeCount = false;
-    minL2NormTolerated = 0;
-    normalizeGroupName = "S1ToFrame0ReconError";
-    normalizeFromPostPerspective = false;
-    initialWriteTime = -1;
-    timeConstantTau = 100;
-    writeCompressedCheckpoints = false;
-    momentumDecay = 0;
-    strength = 1;
-    weightInitType = "UniformRandomWeight";
-    normalizeMethod = "normalizeGroup";
-    selfFlag = false;
+    updateGSynFromPostPerspective = false;
     wMinInit = -1.0;
-    dWMax = 0.1;
-    normalizeDw = true;
-    normalizeOnInitialize = true;
-    rMinX = 0;
-    momentumMethod = "viscosity";
-    pvpatchAccumulateType = "convolve";
-    writeStep = -1;
-    normalize_cutoff = 0;
-    normalizeArborsIndividually = false;
-    plasticityFlag = true;
-    nyp = 17;
 };
 
-HyPerLayer "Frame2Recon" = {
-    valueBC = 0;
+CloneConn "S1ToFrame3Recon" = {
+    writeCompressedCheckpoints = false;
+    channelCode = 0;
+    postLayerName = "Frame3Recon";
+    delay = [0.0];
+    updateGSynFromPostPerspective = false;
     writeStep = -1;
-    nyScale = 1;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "S1";
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = false;
+    originalConnName = "S1ToFrame3ReconError";
+};
+
+IdentConn "Frame1ToFrame1ReconError" = {
+    channelCode = 0;
+    preLayerName = "Frame1";
+    delay = [0.0];
+    postLayerName = "Frame1ReconError";
+};
+
+HyPerLCALayer "S1" = {
+    valueV = 0.0;
     nxScale = 1;
-    phase = 4;
-    sparseLayer = false;
-    updateGpu = false;
-    initialWriteTime = -1;
-    nf = 1;
-    InitVType = "ZeroV";
+    AShift = 0;
+    updateGpu = true;
+    nf = 1000;
+    phase = 3;
+    writeSparseValues = true;
+    initializeFromCheckpointFlag = true;
+    valueBC = 0;
+    AMax = infinity;
+    clearGSynInterval = 0;
+    nyScale = 1;
+    timeConstantTau = 3000;
+    VWidth = infinity;
+    initialWriteTime = 2000;
     mirrorBCflag = false;
+    writeStep = 2000;
+    sparseLayer = true;
+    AMin = 0;
+    VThresh = 0.175;
+    selfInteract = true;
+    InitVType = "ConstantV";
 };
 
 CloneConn "S1ToFrame8Recon" = {
-    writeStep = -1;
-    receiveGpu = false;
+    writeCompressedCheckpoints = false;
     channelCode = 0;
+    postLayerName = "Frame8Recon";
+    delay = [0.0];
+    updateGSynFromPostPerspective = false;
+    writeStep = -1;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "S1";
     selfFlag = false;
     convertRateToSpikeCount = false;
-    postLayerName = "Frame8Recon";
-    writeCompressedCheckpoints = false;
-    preLayerName = "S1";
-    delay = [0.0];
+    receiveGpu = false;
     originalConnName = "S1ToFrame8ReconError";
-    pvpatchAccumulateType = "convolve";
-    updateGSynFromPostPerspective = false;
 };
 
 TransposeConn "Frame8ReconErrorToS1" = {
-    writeStep = -1;
-    receiveGpu = true;
+    writeCompressedCheckpoints = false;
     channelCode = 0;
+    postLayerName = "S1";
+    originalConnName = "S1ToFrame8ReconError";
+    delay = [0.0];
+    updateGSynFromPostPerspective = true;
+    writeStep = -1;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "Frame8ReconError";
     selfFlag = false;
     convertRateToSpikeCount = false;
-    delay = [0.0];
-    postLayerName = "S1";
-    writeCompressedCheckpoints = false;
-    preLayerName = "Frame8ReconError";
-    pvpatchAccumulateType = "convolve";
-    originalConnName = "S1ToFrame8ReconError";
-    updateGSynFromPostPerspective = true;
+    receiveGpu = true;
     gpuGroupIdx = -1;
 };
 
 IdentConn "Frame8ReconToFrame8ReconError" = {
-    postLayerName = "Frame8ReconError";
-    preLayerName = "Frame8Recon";
     channelCode = 1;
+    preLayerName = "Frame8Recon";
     delay = [0.0];
+    postLayerName = "Frame8ReconError";
 };
 
-TransposeConn "Frame5ReconErrorToS1" = {
-    writeStep = -1;
-    receiveGpu = true;
-    channelCode = 0;
-    selfFlag = false;
-    convertRateToSpikeCount = false;
-    delay = [0.0];
-    postLayerName = "S1";
-    writeCompressedCheckpoints = false;
-    preLayerName = "Frame5ReconError";
-    pvpatchAccumulateType = "convolve";
-    originalConnName = "S1ToFrame5ReconError";
-    updateGSynFromPostPerspective = true;
-    gpuGroupIdx = -1;
+L2NormProbe "Frame1ReconErrorL2Probe" = {
+    targetLayer = "Frame1ReconError";
+    textOutputFlag = true;
+    coefficient = 0.5;
+    probeOutputFile = "Frame1ReconErrorL2Probe.txt";
+    exponent = 2;
+    energyProbe = "EnergyProbe";
 };
 
-ImageLayer "Frame2" = {
-    offsetY = 0;
-    batchMethod = "byList";
-    initializeFromCheckpointFlag = false;
-    nyScale = 1;
-    nxScale = 1;
-    padValue = 0;
-    inverseFlag = false;
-    resetToStartOnLoop = false;
-    useInputBCflag = false;
-    initialWriteTime = -1;
-    nf = 1;
-    offsetX = 0;
-    writeImages = 0;
-    mirrorBCflag = true;
-    autoResizeFlag = true;
-    normalizeLuminanceFlag = true;
-    writeStep = -1;
-    offsetAnchor = "cc";
-    jitterFlag = 0;
-    start_frame_index = [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2];
-    phase = 1;
-    sparseLayer = false;
-    updateGpu = false;
-    displayPeriod = 2000;
-    inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
-    writeFrameToTimestamp = true;
-    aspectRatioAdjustment = "crop";
-    interpolationMethod = "bicubic";
-    normalizeStdDev = true;
-};
-
-HyPerLayer "Frame1ReconError" = {
+HyPerLayer "Frame5Recon" = {
     valueBC = 0;
-    writeStep = -1;
-    nyScale = 1;
     nxScale = 1;
-    phase = 2;
-    sparseLayer = false;
     updateGpu = false;
-    initialWriteTime = -1;
     nf = 1;
-    InitVType = "ZeroV";
     mirrorBCflag = false;
-};
-
-ImageLayer "Frame4" = {
-    offsetY = 0;
-    batchMethod = "byList";
-    initializeFromCheckpointFlag = false;
-    nyScale = 1;
-    nxScale = 1;
-    padValue = 0;
-    inverseFlag = false;
-    resetToStartOnLoop = false;
-    useInputBCflag = false;
-    initialWriteTime = -1;
-    nf = 1;
-    offsetX = 0;
-    writeImages = 0;
-    mirrorBCflag = true;
-    autoResizeFlag = true;
-    normalizeLuminanceFlag = true;
-    writeStep = -1;
-    offsetAnchor = "cc";
-    jitterFlag = 0;
-    start_frame_index = [4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4];
-    phase = 1;
-    sparseLayer = false;
-    updateGpu = false;
-    displayPeriod = 2000;
-    inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
-    writeFrameToTimestamp = true;
-    aspectRatioAdjustment = "crop";
-    interpolationMethod = "bicubic";
-    normalizeStdDev = true;
-};
-
-IdentConn "Frame2ToFrame2ReconError" = {
-    postLayerName = "Frame2ReconError";
-    preLayerName = "Frame2";
-    channelCode = 0;
-    delay = [0.0];
-};
-
-HyPerLayer "Frame1Recon" = {
-    valueBC = 0;
-    writeStep = -1;
-    nyScale = 1;
-    nxScale = 1;
     phase = 4;
     sparseLayer = false;
-    updateGpu = false;
     initialWriteTime = -1;
-    nf = 1;
-    InitVType = "ZeroV";
-    mirrorBCflag = false;
-};
-
-IdentConn "Frame6ToFrame6ReconError" = {
-    postLayerName = "Frame6ReconError";
-    preLayerName = "Frame6";
-    channelCode = 0;
-    delay = [0.0];
-};
-
-TransposeConn "Frame7ReconErrorToS1" = {
-    writeStep = -1;
-    receiveGpu = true;
-    channelCode = 0;
-    selfFlag = false;
-    convertRateToSpikeCount = false;
-    delay = [0.0];
-    postLayerName = "S1";
-    writeCompressedCheckpoints = false;
-    preLayerName = "Frame7ReconError";
-    pvpatchAccumulateType = "convolve";
-    originalConnName = "S1ToFrame7ReconError";
-    updateGSynFromPostPerspective = true;
-    gpuGroupIdx = -1;
-};
-
-CloneConn "S1ToFrame0Recon" = {
-    writeStep = -1;
-    receiveGpu = false;
-    channelCode = 0;
-    selfFlag = false;
-    convertRateToSpikeCount = false;
-    postLayerName = "Frame0Recon";
-    writeCompressedCheckpoints = false;
-    preLayerName = "S1";
-    delay = [0.0];
-    originalConnName = "S1ToFrame0ReconError";
-    pvpatchAccumulateType = "convolve";
-    updateGSynFromPostPerspective = false;
-};
-
-L2NormProbe "Frame8ReconErrorL2Probe" = {
-    probeOutputFile = "Frame8ReconErrorL2Probe.txt";
-    targetLayer = "Frame8ReconError";
-    energyProbe = "EnergyProbe";
-    textOutputFlag = true;
-    exponent = 2;
-    coefficient = 0.5;
-};
-
-L2NormProbe "Frame4ReconErrorL2Probe" = {
-    probeOutputFile = "Frame4ReconErrorL2Probe.txt";
-    targetLayer = "Frame4ReconError";
-    energyProbe = "EnergyProbe";
-    textOutputFlag = true;
-    exponent = 2;
-    coefficient = 0.5;
-};
-
-MomentumConn "S1ToFrame7ReconError" = {
-    shrinkPatches = false;
-    initializeFromCheckpointFlag = true;
-    triggerLayerName = "Frame0";
-    sparseFraction = 0.9;
-    useMask = false;
-    keepKernelsSynchronized = true;
-    normalizeOnWeightUpdate = true;
-    delay = [0.0];
-    updateGSynFromPostPerspective = false;
-    rMinY = 0;
-    wMaxInit = 1.0;
-    receiveGpu = false;
-    triggerOffset = 1;
-    postLayerName = "Frame7ReconError";
-    numAxonalArbors = 1;
-    preLayerName = "S1";
-    nxp = 17;
-    nonnegativeConstraintFlag = false;
-    channelCode = -1;
-    sharedWeights = true;
-    convertRateToSpikeCount = false;
-    minL2NormTolerated = 0;
-    normalizeGroupName = "S1ToFrame0ReconError";
-    normalizeFromPostPerspective = false;
-    initialWriteTime = -1;
-    timeConstantTau = 100;
-    writeCompressedCheckpoints = false;
-    momentumDecay = 0;
-    strength = 1;
-    weightInitType = "UniformRandomWeight";
-    normalizeMethod = "normalizeGroup";
-    selfFlag = false;
-    wMinInit = -1.0;
-    dWMax = 0.1;
-    normalizeDw = true;
-    normalizeOnInitialize = true;
-    rMinX = 0;
-    momentumMethod = "viscosity";
-    pvpatchAccumulateType = "convolve";
-    writeStep = -1;
-    normalize_cutoff = 0;
-    normalizeArborsIndividually = false;
-    plasticityFlag = true;
-    nyp = 17;
-};
-
-TransposeConn "Frame6ReconErrorToS1" = {
-    writeStep = -1;
-    receiveGpu = true;
-    channelCode = 0;
-    selfFlag = false;
-    convertRateToSpikeCount = false;
-    delay = [0.0];
-    postLayerName = "S1";
-    writeCompressedCheckpoints = false;
-    preLayerName = "Frame6ReconError";
-    pvpatchAccumulateType = "convolve";
-    originalConnName = "S1ToFrame6ReconError";
-    updateGSynFromPostPerspective = true;
-    gpuGroupIdx = -1;
-};
-
-IdentConn "Frame7ReconToFrame7ReconError" = {
-    postLayerName = "Frame7ReconError";
-    preLayerName = "Frame7Recon";
-    channelCode = 1;
-    delay = [0.0];
-};
-
-IdentConn "Frame7ToFrame7ReconError" = {
-    postLayerName = "Frame7ReconError";
-    preLayerName = "Frame7";
-    channelCode = 0;
-    delay = [0.0];
-};
-
-HyPerLayer "Frame7ReconError" = {
-    valueBC = 0;
     writeStep = -1;
     nyScale = 1;
-    nxScale = 1;
-    phase = 2;
-    sparseLayer = false;
-    updateGpu = false;
-    initialWriteTime = -1;
-    nf = 1;
     InitVType = "ZeroV";
-    mirrorBCflag = false;
 };
 
-IdentConn "Frame6ReconToFrame6ReconError" = {
-    postLayerName = "Frame6ReconError";
-    preLayerName = "Frame6Recon";
-    channelCode = 1;
-    delay = [0.0];
+HyPerLayer "Frame8Recon" = {
+    valueBC = 0;
+    nxScale = 1;
+    updateGpu = false;
+    nf = 1;
+    mirrorBCflag = false;
+    phase = 4;
+    sparseLayer = false;
+    initialWriteTime = -1;
+    writeStep = -1;
+    nyScale = 1;
+    InitVType = "ZeroV";
 };
 
 HyPerLayer "Frame8ReconError" = {
-    valueBC = 0;
-    writeStep = -1;
-    nyScale = 1;
-    nxScale = 1;
-    phase = 2;
     sparseLayer = false;
     updateGpu = false;
-    initialWriteTime = -1;
     nf = 1;
-    InitVType = "ZeroV";
     mirrorBCflag = false;
+    phase = 2;
+    nxScale = 1;
+    valueBC = 0;
+    nyScale = 1;
+    writeStep = -1;
+    initialWriteTime = -1;
+    InitVType = "ZeroV";
 };
 
-MomentumConn "S1ToFrame1ReconError" = {
-    shrinkPatches = false;
-    initializeFromCheckpointFlag = true;
-    triggerLayerName = "Frame0";
-    sparseFraction = 0.9;
-    useMask = false;
-    keepKernelsSynchronized = true;
-    normalizeOnWeightUpdate = true;
+L2NormProbe "Frame8ReconErrorL2Probe" = {
+    targetLayer = "Frame8ReconError";
+    textOutputFlag = true;
+    coefficient = 0.5;
+    probeOutputFile = "Frame8ReconErrorL2Probe.txt";
+    exponent = 2;
+    energyProbe = "EnergyProbe";
+};
+
+MomentumConn "S1ToFrame7ReconError" = {
+    normalizeArborsIndividually = false;
+    channelCode = -1;
+    normalizeFromPostPerspective = false;
+    nyp = 17;
+    normalize_cutoff = 0;
+    minL2NormTolerated = 0;
+    normalizeDw = true;
+    postLayerName = "Frame7ReconError";
     delay = [0.0];
-    updateGSynFromPostPerspective = false;
-    rMinY = 0;
-    wMaxInit = 1.0;
-    receiveGpu = false;
     triggerOffset = 1;
-    postLayerName = "Frame1ReconError";
+    initialWriteTime = -1;
+    strength = 1;
+    writeStep = -1;
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = false;
+    writeCompressedCheckpoints = false;
+    wMaxInit = 1.0;
+    rMinX = 0;
+    shrinkPatches = false;
+    sparseFraction = 0.9;
+    normalizeGroupName = "S1ToFrame0ReconError";
+    normalizeOnWeightUpdate = true;
+    plasticityFlag = true;
+    nonnegativeConstraintFlag = false;
+    normalizeOnInitialize = true;
+    initializeFromCheckpointFlag = true;
     numAxonalArbors = 1;
+    triggerLayerName = "Frame0";
+    dWMax = 0.1;
+    sharedWeights = true;
+    normalizeMethod = "normalizeGroup";
+    momentumDecay = 0;
+    keepKernelsSynchronized = true;
+    timeConstantTau = 100;
+    useMask = false;
+    pvpatchAccumulateType = "convolve";
+    momentumMethod = "viscosity";
+    rMinY = 0;
+    weightInitType = "UniformRandomWeight";
     preLayerName = "S1";
     nxp = 17;
-    nonnegativeConstraintFlag = false;
-    channelCode = -1;
-    sharedWeights = true;
-    convertRateToSpikeCount = false;
-    minL2NormTolerated = 0;
-    normalizeGroupName = "S1ToFrame0ReconError";
-    normalizeFromPostPerspective = false;
-    initialWriteTime = -1;
-    timeConstantTau = 100;
-    writeCompressedCheckpoints = false;
-    momentumDecay = 0;
-    strength = 1;
-    weightInitType = "UniformRandomWeight";
-    normalizeMethod = "normalizeGroup";
-    selfFlag = false;
+    updateGSynFromPostPerspective = false;
     wMinInit = -1.0;
-    dWMax = 0.1;
-    normalizeDw = true;
-    normalizeOnInitialize = true;
-    rMinX = 0;
-    momentumMethod = "viscosity";
-    pvpatchAccumulateType = "convolve";
+};
+
+LogTimeScaleProbe "AdaptiveTimeScales" = {
+    baseMin = 1.0;
+    growthFactor = 0.025;
+    triggerOffset = 0;
+    baseMax = 1.1;
+    targetName = "EnergyProbe";
+    textOutputFlag = true;
+    logSlope = 0.01;
+    probeOutputFile = "AdaptiveTimeScales.txt";
+    triggerLayerName = "Frame0";
+    tauFactor = 0.025;
+    logThresh = 10.0;
+};
+
+L2NormProbe "Frame6ReconErrorL2Probe" = {
+    targetLayer = "Frame6ReconError";
+    textOutputFlag = true;
+    coefficient = 0.5;
+    probeOutputFile = "Frame6ReconErrorL2Probe.txt";
+    exponent = 2;
+    energyProbe = "EnergyProbe";
+};
+
+TransposeConn "Frame7ReconErrorToS1" = {
+    writeCompressedCheckpoints = false;
+    channelCode = 0;
+    postLayerName = "S1";
+    originalConnName = "S1ToFrame7ReconError";
+    delay = [0.0];
+    updateGSynFromPostPerspective = true;
     writeStep = -1;
-    normalize_cutoff = 0;
-    normalizeArborsIndividually = false;
-    plasticityFlag = true;
-    nyp = 17;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "Frame7ReconError";
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = true;
+    gpuGroupIdx = -1;
+};
+
+L2NormProbe "Frame2ReconErrorL2Probe" = {
+    targetLayer = "Frame2ReconError";
+    textOutputFlag = true;
+    coefficient = 0.5;
+    probeOutputFile = "Frame2ReconErrorL2Probe.txt";
+    exponent = 2;
+    energyProbe = "EnergyProbe";
+};
+
+IdentConn "Frame7ReconToFrame7ReconError" = {
+    channelCode = 1;
+    preLayerName = "Frame7Recon";
+    delay = [0.0];
+    postLayerName = "Frame7ReconError";
+};
+
+IdentConn "Frame7ToFrame7ReconError" = {
+    channelCode = 0;
+    preLayerName = "Frame7";
+    delay = [0.0];
+    postLayerName = "Frame7ReconError";
+};
+
+HyPerLayer "Frame7Recon" = {
+    valueBC = 0;
+    nxScale = 1;
+    updateGpu = false;
+    nf = 1;
+    mirrorBCflag = false;
+    phase = 4;
+    sparseLayer = false;
+    initialWriteTime = -1;
+    writeStep = -1;
+    nyScale = 1;
+    InitVType = "ZeroV";
+};
+
+HyPerLayer "Frame7ReconError" = {
+    sparseLayer = false;
+    updateGpu = false;
+    nf = 1;
+    mirrorBCflag = false;
+    phase = 2;
+    nxScale = 1;
+    valueBC = 0;
+    nyScale = 1;
+    writeStep = -1;
+    initialWriteTime = -1;
+    InitVType = "ZeroV";
+};
+
+L2NormProbe "Frame4ReconErrorL2Probe" = {
+    targetLayer = "Frame4ReconError";
+    textOutputFlag = true;
+    coefficient = 0.5;
+    probeOutputFile = "Frame4ReconErrorL2Probe.txt";
+    exponent = 2;
+    energyProbe = "EnergyProbe";
+};
+
+IdentConn "Frame1ReconToFrame1ReconError" = {
+    channelCode = 1;
+    preLayerName = "Frame1Recon";
+    delay = [0.0];
+    postLayerName = "Frame1ReconError";
+};
+
+IdentConn "Frame8ToFrame8ReconError" = {
+    channelCode = 0;
+    preLayerName = "Frame8";
+    delay = [0.0];
+    postLayerName = "Frame8ReconError";
+};
+
+ImageLayer "Frame5" = {
+    padValue = 0;
+    useInputBCflag = false;
+    nxScale = 1;
+    inverseFlag = false;
+    updateGpu = false;
+    start_frame_index = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5];
+    phase = 1;
+    resetToStartOnLoop = false;
+    offsetY = 0;
+    nyScale = 1;
+    sparseLayer = false;
+    autoResizeFlag = true;
+    initializeFromCheckpointFlag = false;
+    batchMethod = "byList";
+    displayPeriod = 2000;
+    offsetAnchor = "cc";
+    offsetX = 0;
+    inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
+    aspectRatioAdjustment = "crop";
+    writeStep = -1;
+    interpolationMethod = "bicubic";
+    mirrorBCflag = true;
+    writeFrameToTimestamp = true;
+    initialWriteTime = -1;
+    jitterFlag = 0;
+    normalizeLuminanceFlag = true;
+    writeImages = 0;
+    nf = 1;
+    normalizeStdDev = true;
 };
 
 HyPerLayer "Frame6Recon" = {
     valueBC = 0;
-    writeStep = -1;
-    nyScale = 1;
     nxScale = 1;
+    updateGpu = false;
+    nf = 1;
+    mirrorBCflag = false;
     phase = 4;
     sparseLayer = false;
-    updateGpu = false;
     initialWriteTime = -1;
-    nf = 1;
-    InitVType = "ZeroV";
-    mirrorBCflag = false;
-};
-
-IdentConn "Frame5ToFrame5ReconError" = {
-    postLayerName = "Frame5ReconError";
-    preLayerName = "Frame5";
-    channelCode = 0;
-    delay = [0.0];
-};
-
-IdentConn "Frame1ToFrame1ReconError" = {
-    postLayerName = "Frame1ReconError";
-    preLayerName = "Frame1";
-    channelCode = 0;
-    delay = [0.0];
-};
-
-MomentumConn "S1ToFrame5ReconError" = {
-    shrinkPatches = false;
-    initializeFromCheckpointFlag = true;
-    triggerLayerName = "Frame0";
-    sparseFraction = 0.9;
-    useMask = false;
-    keepKernelsSynchronized = true;
-    normalizeOnWeightUpdate = true;
-    delay = [0.0];
-    updateGSynFromPostPerspective = false;
-    rMinY = 0;
-    wMaxInit = 1.0;
-    receiveGpu = false;
-    triggerOffset = 1;
-    postLayerName = "Frame5ReconError";
-    numAxonalArbors = 1;
-    preLayerName = "S1";
-    nxp = 17;
-    nonnegativeConstraintFlag = false;
-    channelCode = -1;
-    sharedWeights = true;
-    convertRateToSpikeCount = false;
-    minL2NormTolerated = 0;
-    normalizeGroupName = "S1ToFrame0ReconError";
-    normalizeFromPostPerspective = false;
-    initialWriteTime = -1;
-    timeConstantTau = 100;
-    writeCompressedCheckpoints = false;
-    momentumDecay = 0;
-    strength = 1;
-    weightInitType = "UniformRandomWeight";
-    normalizeMethod = "normalizeGroup";
-    selfFlag = false;
-    wMinInit = -1.0;
-    dWMax = 0.1;
-    normalizeDw = true;
-    normalizeOnInitialize = true;
-    rMinX = 0;
-    momentumMethod = "viscosity";
-    pvpatchAccumulateType = "convolve";
     writeStep = -1;
-    normalize_cutoff = 0;
-    normalizeArborsIndividually = false;
-    plasticityFlag = true;
-    nyp = 17;
-};
-
-L2NormProbe "Frame5ReconErrorL2Probe" = {
-    probeOutputFile = "Frame5ReconErrorL2Probe.txt";
-    targetLayer = "Frame5ReconError";
-    energyProbe = "EnergyProbe";
-    textOutputFlag = true;
-    exponent = 2;
-    coefficient = 0.5;
-};
-
-CloneConn "S1ToFrame3Recon" = {
-    writeStep = -1;
-    receiveGpu = false;
-    channelCode = 0;
-    selfFlag = false;
-    convertRateToSpikeCount = false;
-    postLayerName = "Frame3Recon";
-    writeCompressedCheckpoints = false;
-    preLayerName = "S1";
-    delay = [0.0];
-    originalConnName = "S1ToFrame3ReconError";
-    pvpatchAccumulateType = "convolve";
-    updateGSynFromPostPerspective = false;
-};
-
-ImageLayer "Frame6" = {
-    offsetY = 0;
-    batchMethod = "byList";
-    initializeFromCheckpointFlag = false;
     nyScale = 1;
-    nxScale = 1;
+    InitVType = "ZeroV";
+};
+
+ImageLayer "Frame8" = {
     padValue = 0;
-    inverseFlag = false;
-    resetToStartOnLoop = false;
     useInputBCflag = false;
-    initialWriteTime = -1;
-    nf = 1;
-    offsetX = 0;
-    writeImages = 0;
-    mirrorBCflag = true;
-    autoResizeFlag = true;
-    normalizeLuminanceFlag = true;
-    writeStep = -1;
-    offsetAnchor = "cc";
-    jitterFlag = 0;
-    start_frame_index = [6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6];
-    phase = 1;
-    sparseLayer = false;
+    nxScale = 1;
+    inverseFlag = false;
     updateGpu = false;
+    start_frame_index = [8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8];
+    phase = 1;
+    resetToStartOnLoop = false;
+    offsetY = 0;
+    nyScale = 1;
+    sparseLayer = false;
+    autoResizeFlag = true;
+    initializeFromCheckpointFlag = false;
+    batchMethod = "byList";
     displayPeriod = 2000;
+    offsetAnchor = "cc";
+    offsetX = 0;
     inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
-    writeFrameToTimestamp = true;
     aspectRatioAdjustment = "crop";
+    writeStep = -1;
     interpolationMethod = "bicubic";
+    mirrorBCflag = true;
+    writeFrameToTimestamp = true;
+    initialWriteTime = -1;
+    jitterFlag = 0;
+    normalizeLuminanceFlag = true;
+    writeImages = 0;
+    nf = 1;
     normalizeStdDev = true;
-};
-
-IdentConn "Frame5ReconToFrame5ReconError" = {
-    postLayerName = "Frame5ReconError";
-    preLayerName = "Frame5Recon";
-    channelCode = 1;
-    delay = [0.0];
-};
-
-CloneConn "S1ToFrame4Recon" = {
-    writeStep = -1;
-    receiveGpu = false;
-    channelCode = 0;
-    selfFlag = false;
-    convertRateToSpikeCount = false;
-    postLayerName = "Frame4Recon";
-    writeCompressedCheckpoints = false;
-    preLayerName = "S1";
-    delay = [0.0];
-    originalConnName = "S1ToFrame4ReconError";
-    pvpatchAccumulateType = "convolve";
-    updateGSynFromPostPerspective = false;
-};
-
-TransposeConn "Frame4ReconErrorToS1" = {
-    writeStep = -1;
-    receiveGpu = true;
-    channelCode = 0;
-    selfFlag = false;
-    convertRateToSpikeCount = false;
-    delay = [0.0];
-    postLayerName = "S1";
-    writeCompressedCheckpoints = false;
-    preLayerName = "Frame4ReconError";
-    pvpatchAccumulateType = "convolve";
-    originalConnName = "S1ToFrame4ReconError";
-    updateGSynFromPostPerspective = true;
-    gpuGroupIdx = -1;
 };
 
 HyPerLayer "Frame4ReconError" = {
-    valueBC = 0;
-    writeStep = -1;
-    nyScale = 1;
-    nxScale = 1;
-    phase = 2;
     sparseLayer = false;
     updateGpu = false;
-    initialWriteTime = -1;
     nf = 1;
-    InitVType = "ZeroV";
     mirrorBCflag = false;
-};
-
-L2NormProbe "Frame1ReconErrorL2Probe" = {
-    probeOutputFile = "Frame1ReconErrorL2Probe.txt";
-    targetLayer = "Frame1ReconError";
-    energyProbe = "EnergyProbe";
-    textOutputFlag = true;
-    exponent = 2;
-    coefficient = 0.5;
-};
-
-TransposeConn "Frame2ReconErrorToS1" = {
+    phase = 2;
+    nxScale = 1;
+    valueBC = 0;
+    nyScale = 1;
     writeStep = -1;
-    receiveGpu = true;
+    initialWriteTime = -1;
+    InitVType = "ZeroV";
+};
+
+CloneConn "S1ToFrame0Recon" = {
+    writeCompressedCheckpoints = false;
     channelCode = 0;
+    postLayerName = "Frame0Recon";
+    delay = [0.0];
+    updateGSynFromPostPerspective = false;
+    writeStep = -1;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "S1";
     selfFlag = false;
     convertRateToSpikeCount = false;
-    delay = [0.0];
-    postLayerName = "S1";
-    writeCompressedCheckpoints = false;
-    preLayerName = "Frame2ReconError";
-    pvpatchAccumulateType = "convolve";
-    originalConnName = "S1ToFrame2ReconError";
-    updateGSynFromPostPerspective = true;
-    gpuGroupIdx = -1;
+    receiveGpu = false;
+    originalConnName = "S1ToFrame0ReconError";
 };
 
-HyPerLayer "Frame0Recon" = {
-    valueBC = 0;
+IdentConn "Frame0ReconToFrame0ReconError" = {
+    channelCode = 1;
+    preLayerName = "Frame0Recon";
+    delay = [0.0];
+    postLayerName = "Frame0ReconError";
+};
+
+IdentConn "Frame2ReconToFrame2ReconError" = {
+    channelCode = 1;
+    preLayerName = "Frame2Recon";
+    delay = [0.0];
+    postLayerName = "Frame2ReconError";
+};
+
+MomentumConn "S1ToFrame5ReconError" = {
+    normalizeArborsIndividually = false;
+    channelCode = -1;
+    normalizeFromPostPerspective = false;
+    nyp = 17;
+    normalize_cutoff = 0;
+    minL2NormTolerated = 0;
+    normalizeDw = true;
+    postLayerName = "Frame5ReconError";
+    delay = [0.0];
+    triggerOffset = 1;
+    initialWriteTime = -1;
+    strength = 1;
     writeStep = -1;
-    nyScale = 1;
-    nxScale = 1;
-    phase = 4;
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = false;
+    writeCompressedCheckpoints = false;
+    wMaxInit = 1.0;
+    rMinX = 0;
+    shrinkPatches = false;
+    sparseFraction = 0.9;
+    normalizeGroupName = "S1ToFrame0ReconError";
+    normalizeOnWeightUpdate = true;
+    plasticityFlag = true;
+    nonnegativeConstraintFlag = false;
+    normalizeOnInitialize = true;
+    initializeFromCheckpointFlag = true;
+    numAxonalArbors = 1;
+    triggerLayerName = "Frame0";
+    dWMax = 0.1;
+    sharedWeights = true;
+    normalizeMethod = "normalizeGroup";
+    momentumDecay = 0;
+    keepKernelsSynchronized = true;
+    timeConstantTau = 100;
+    useMask = false;
+    pvpatchAccumulateType = "convolve";
+    momentumMethod = "viscosity";
+    rMinY = 0;
+    weightInitType = "UniformRandomWeight";
+    preLayerName = "S1";
+    nxp = 17;
+    updateGSynFromPostPerspective = false;
+    wMinInit = -1.0;
+};
+
+HyPerLayer "Frame3ReconError" = {
     sparseLayer = false;
     updateGpu = false;
-    initialWriteTime = -1;
     nf = 1;
-    InitVType = "ZeroV";
     mirrorBCflag = false;
+    phase = 2;
+    nxScale = 1;
+    valueBC = 0;
+    nyScale = 1;
+    writeStep = -1;
+    initialWriteTime = -1;
+    InitVType = "ZeroV";
+};
+
+L2NormProbe "Frame5ReconErrorL2Probe" = {
+    targetLayer = "Frame5ReconError";
+    textOutputFlag = true;
+    coefficient = 0.5;
+    probeOutputFile = "Frame5ReconErrorL2Probe.txt";
+    exponent = 2;
+    energyProbe = "EnergyProbe";
+};
+
+ImageLayer "Frame3" = {
+    padValue = 0;
+    useInputBCflag = false;
+    nxScale = 1;
+    inverseFlag = false;
+    updateGpu = false;
+    start_frame_index = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3];
+    phase = 1;
+    resetToStartOnLoop = false;
+    offsetY = 0;
+    nyScale = 1;
+    sparseLayer = false;
+    autoResizeFlag = true;
+    initializeFromCheckpointFlag = false;
+    batchMethod = "byList";
+    displayPeriod = 2000;
+    offsetAnchor = "cc";
+    offsetX = 0;
+    inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
+    aspectRatioAdjustment = "crop";
+    writeStep = -1;
+    interpolationMethod = "bicubic";
+    mirrorBCflag = true;
+    writeFrameToTimestamp = true;
+    initialWriteTime = -1;
+    jitterFlag = 0;
+    normalizeLuminanceFlag = true;
+    writeImages = 0;
+    nf = 1;
+    normalizeStdDev = true;
 };
 
 CloneConn "S1ToFrame1Recon" = {
-    writeStep = -1;
-    receiveGpu = false;
+    writeCompressedCheckpoints = false;
     channelCode = 0;
-    selfFlag = false;
-    convertRateToSpikeCount = false;
     postLayerName = "Frame1Recon";
-    writeCompressedCheckpoints = false;
-    preLayerName = "S1";
     delay = [0.0];
-    originalConnName = "S1ToFrame1ReconError";
-    pvpatchAccumulateType = "convolve";
     updateGSynFromPostPerspective = false;
-};
-
-HyPerLayer "Frame2ReconError" = {
-    valueBC = 0;
     writeStep = -1;
-    nyScale = 1;
-    nxScale = 1;
-    phase = 2;
-    sparseLayer = false;
-    updateGpu = false;
-    initialWriteTime = -1;
-    nf = 1;
-    InitVType = "ZeroV";
-    mirrorBCflag = false;
-};
-
-MomentumConn "S1ToFrame0ReconError" = {
-    shrinkPatches = false;
-    initializeFromCheckpointFlag = true;
-    triggerLayerName = "Frame0";
-    sparseFraction = 0.9;
-    useMask = false;
-    keepKernelsSynchronized = true;
-    normalizeOnWeightUpdate = true;
-    delay = [0.0];
-    updateGSynFromPostPerspective = false;
-    rMinY = 0;
-    wMaxInit = 1.0;
-    receiveGpu = false;
-    triggerOffset = 1;
-    postLayerName = "Frame0ReconError";
-    numAxonalArbors = 1;
+    pvpatchAccumulateType = "convolve";
     preLayerName = "S1";
-    nxp = 17;
-    nonnegativeConstraintFlag = false;
-    channelCode = -1;
-    sharedWeights = true;
-    convertRateToSpikeCount = false;
-    minL2NormTolerated = 0;
-    normalizeFromPostPerspective = false;
-    initialWriteTime = -1;
-    timeConstantTau = 100;
-    writeCompressedCheckpoints = false;
-    momentumDecay = 0;
-    strength = 1;
-    weightInitType = "UniformRandomWeight";
-    normalizeMethod = "normalizeL2";
     selfFlag = false;
-    wMinInit = -1.0;
-    dWMax = 0.1;
-    normalizeDw = true;
-    normalizeOnInitialize = true;
-    rMinX = 0;
-    momentumMethod = "viscosity";
-    pvpatchAccumulateType = "convolve";
-    writeStep = -1;
-    normalize_cutoff = 0;
-    normalizeArborsIndividually = false;
-    plasticityFlag = true;
-    nyp = 17;
+    convertRateToSpikeCount = false;
+    receiveGpu = false;
+    originalConnName = "S1ToFrame1ReconError";
 };
 
-ImageLayer "Frame5" = {
-    offsetY = 0;
-    batchMethod = "byList";
-    initializeFromCheckpointFlag = false;
-    nyScale = 1;
-    nxScale = 1;
-    padValue = 0;
-    inverseFlag = false;
-    resetToStartOnLoop = false;
-    useInputBCflag = false;
-    initialWriteTime = -1;
-    nf = 1;
-    offsetX = 0;
-    writeImages = 0;
-    mirrorBCflag = true;
-    autoResizeFlag = true;
-    normalizeLuminanceFlag = true;
-    writeStep = -1;
-    offsetAnchor = "cc";
-    jitterFlag = 0;
-    start_frame_index = [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5];
-    phase = 1;
+IdentConn "Frame4ToFrame4ReconError" = {
+    channelCode = 0;
+    preLayerName = "Frame4";
+    delay = [0.0];
+    postLayerName = "Frame4ReconError";
+};
+
+IdentConn "Frame4ReconToFrame4ReconError" = {
+    channelCode = 1;
+    preLayerName = "Frame4Recon";
+    delay = [0.0];
+    postLayerName = "Frame4ReconError";
+};
+
+IdentConn "Frame3ReconToFrame3ReconError" = {
+    channelCode = 1;
+    preLayerName = "Frame3Recon";
+    delay = [0.0];
+    postLayerName = "Frame3ReconError";
+};
+
+HyPerLayer "Frame5ReconError" = {
     sparseLayer = false;
     updateGpu = false;
-    displayPeriod = 2000;
-    inputPath = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
-    writeFrameToTimestamp = true;
-    aspectRatioAdjustment = "crop";
-    interpolationMethod = "bicubic";
-    normalizeStdDev = true;
+    nf = 1;
+    mirrorBCflag = false;
+    phase = 2;
+    nxScale = 1;
+    valueBC = 0;
+    nyScale = 1;
+    writeStep = -1;
+    initialWriteTime = -1;
+    InitVType = "ZeroV";
+};
+
+TransposeConn "Frame0ReconErrorToS1" = {
+    writeCompressedCheckpoints = false;
+    channelCode = 0;
+    postLayerName = "S1";
+    originalConnName = "S1ToFrame0ReconError";
+    delay = [0.0];
+    updateGSynFromPostPerspective = true;
+    writeStep = -1;
+    pvpatchAccumulateType = "convolve";
+    preLayerName = "Frame0ReconError";
+    selfFlag = false;
+    convertRateToSpikeCount = false;
+    receiveGpu = true;
+    gpuGroupIdx = -1;
 };
 

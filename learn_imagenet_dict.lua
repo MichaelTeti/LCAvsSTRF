@@ -32,7 +32,8 @@ local plasticity            = true;
 local sharedWeights         = true;
 local startFrame            = 0;
 local startTime             = 0;
-local stopTime              = math.ceil(numImages / nbatch) * displayPeriod * displayMultiple * numEpochs;
+local stopTime              = math.ceil(numImages / nbatch) * displayPeriod *
+                                displayMultiple * numEpochs;
 local strideX               = 1;
 local strideY               = 1;
 local temporalPatchSize     = 9;
@@ -61,19 +62,18 @@ local runVersion            = 15;
 
 
 -- run names and output paths
-local runName               = "imagenet_" .. "psx" .. patchSizeX .. "_" ..
-                                  "psy" .. patchSizeY .. "_" .. "inH" ..
-                                  inputHeight .. "_" .. "inW" .. inputWidth ..
-                                  "_" .. "dsize" .. dictionarySize;
+local runName       = "imagenet_" .. "psx" .. patchSizeX .. "_" .. "psy" ..
+                        patchSizeY .. "_" .. "inH" .. inputHeight .. "_" ..
+                        "inW" .. inputWidth .. "_" .. "dsize" .. dictionarySize;
 
-local outputPath            = runName .. "/run" .. runVersion .. "_" .. modelType ..
-                                  threshType .. "thresh" .. "_" .. "Tau" ..
-                                  timeConstantTau .. "_" .. "VThresh" .. VThresh ..
-                                  "_" .. "displayPeriod" .. displayPeriod;
+local outputPath    = runName .. "/run" .. runVersion .. "_" .. modelType ..
+                        threshType .. "thresh" .. "_" .. "Tau" ..
+                        timeConstantTau .. "_" .. "VThresh" .. VThresh .. "_" ..
+                        "displayPeriod" .. displayPeriod;
 
-local initPath              = "imagenet_psx17_psy17_inH32_inW64_dsize1000/" ..
-                                  "run14_LCAsoftthresh_Tau3000_VThresh0.075_finetuning_lower_vthresh_displayPeriod2000/" ..
-                                  "Checkpoints/Checkpoint00002000";
+local initPath      = "imagenet_psx17_psy17_inH32_inW64_dsize1000/" ..
+                        "run14_LCAsoftthresh_Tau3000_VThresh0.075_finetuning_lower_vthresh_displayPeriod2000/" ..
+                        "Checkpoints/Checkpoint00002000";
 
 
 if runNote then
