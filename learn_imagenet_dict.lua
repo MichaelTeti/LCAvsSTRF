@@ -4,7 +4,7 @@ local pv = require "PVModule";
 
 
 -- Input Image Vars
-local imageInputPath        = "/home/mteti/Allen/filenames_train.txt";
+local imageInputPath        = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
 local inputFeatures         = 1;
 local inputHeight           = 32;
 local inputWidth            = 64;
@@ -29,7 +29,6 @@ local numEpochs             = 1;
 local patchSizeX            = 17;
 local patchSizeY            = 17;
 local plasticity            = true;
-local runVersion            = 13;
 local sharedWeights         = true;
 local startFrame            = 0;
 local startTime             = 0;
@@ -38,9 +37,9 @@ local strideX               = 1;
 local strideY               = 1;
 local temporalPatchSize     = 9;
 local threshType            = "soft";
-local timeConstantTau       = 4000;
+local timeConstantTau       = 3000;
 local useGPU                = true;
-local VThresh               = 0.075;
+local VThresh               = 0.175;
 
 
 --Probes and Checkpointing
@@ -57,7 +56,8 @@ local model2ErrorWriteStep  = -1;
 local model2ReconWriteStep  = -1;
 local modelWriteStep        = checkpointPeriod;
 local numCheckpointsKept    = 2;
-local runNameSuffix         = "finetuning_lower_vthresh";
+local runNote               = nil;
+local runVersion            = 15;
 
 
 -- run names and output paths
@@ -68,12 +68,17 @@ local runName               = "imagenet_" .. "psx" .. patchSizeX .. "_" ..
 
 local outputPath            = runName .. "/run" .. runVersion .. "_" .. modelType ..
                                   threshType .. "thresh" .. "_" .. "Tau" ..
-                                  timeConstantTau .. "_" .. "VThresh" ..
-                                  VThresh .. "_" .. runNameSuffix;
+                                  timeConstantTau .. "_" .. "VThresh" .. VThresh ..
+                                  "_" .. "displayPeriod" .. displayPeriod;
 
-local initPath              = "imagenet_psx17_psy17_nbatch256_inH32_inW64_dsize1000_timeConstantTau4000/" ..
-                                  "run10_softThresh/Checkpoints/Checkpoint00008000/";
+local initPath              = "imagenet_psx17_psy17_inH32_inW64_dsize1000/" ..
+                                  "run14_LCAsoftthresh_Tau3000_VThresh0.075_finetuning_lower_vthresh_displayPeriod2000/" ..
+                                  "Checkpoints/Checkpoint00002000";
 
+
+if runNote then
+    outputPath = outputPath .. "_" .. "note" .. runNote;
+end
 
 
 if threshType == "soft" then
