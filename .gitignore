@@ -1,5 +1,6 @@
 imagenet*/
 runs/
+NonsharedWeights*
 *.png
 *.jpg
 *.jpeg 
