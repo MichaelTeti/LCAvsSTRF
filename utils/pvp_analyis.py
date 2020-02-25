@@ -239,6 +239,7 @@ class PVAnalyzer():
                 self.plot_recs(current_ckpt_dir, save_dir)
                 self.plot_energy(save_dir)
                 self.plot_adaptivetimescales(save_dir)
+                print('[INFO] ANALYSIS {} WRITE COMPLETE.'.format(current_ckpt_num))
 
                 if self.delete_old_analyses and len(glob(os.path.join(self.analysis_dir, 'analysis-*'))) > 1:
                     print('[INFO] REMOVING OLD ANALYSIS FILES')
