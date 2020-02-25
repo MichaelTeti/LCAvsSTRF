@@ -8,21 +8,21 @@ local imageInputPath        = "/home/mteti/Allen/LCAvsSTRF/filenames_test.txt";
 local inputFeatures         = 1;
 local inputHeight           = 32;
 local inputWidth            = 64;
-local nbatch                = 4;
+local nbatch                = 10;
 local numImages             = 315176;
 
 
 -- Model Vars
 local AMax                  = infinity;
 local AMin                  = 0;
-local basePhase 	        = 2;
+local basePhase             = 2;
 local dictionarySize        = 1000;
 local displayMultiple       = 1;
 local displayPeriod         = 2000;
 local initFromCkpt          = false;
-local initFromCkptPath      = nil;
+local initFromCkptPath      = "runs/run17_LCA_init_rand/Checkpoints/Checkpoint";
 local initFromFile          = true;
-local initFromFilePrefix    = "/home/mteti/Allen/LCAvsSTRF/NonsharedWeights_VThresh0.075/";
+local initFromFilePrefix    = "imagenet_psx17_psy17_inH32_inW64_dsize1000/run14_LCAsoftthresh_Tau3000_VThresh0.075_finetuning_lower_vthresh_displayPeriod2000/Checkpoints/Checkpoint00002000";
 local learningRate          = 0.1;
 local modelType             = "LCA";
 local momentumTau           = 100;
@@ -30,7 +30,7 @@ local numEpochs             = 1;
 local patchSizeX            = 17;
 local patchSizeY            = 17;
 local plasticity            = false;
-local sharedWeights         = false;
+local sharedWeights         = true;
 local startFrame            = 0;
 local startTime             = 0;
 local stopTime              = math.ceil(numImages / nbatch) * displayPeriod *
@@ -40,7 +40,7 @@ local strideY               = 1;
 local temporalPatchSize     = 9;
 local threshType            = "soft";
 local timeConstantTau       = 3000;
-local useGPU                = false;
+local useGPU                = true;
 local VThresh               = 0.075;
 
 
@@ -58,7 +58,7 @@ local model2ErrorWriteStep  = 50;
 local model2ReconWriteStep  = 50;
 local modelWriteStep        = 50;
 local numCheckpointsKept    = 2;
-local runNote               = "Test_VThresh0.075";
+local runNote               = "VThresh0.075_Test";
 local runVersion            = 17;
 
 
@@ -73,6 +73,11 @@ if threshType == "soft" then
     VWidth = infinity;
 elseif threshType == "firm" then
     VWidth = VThresh;
+end
+
+
+if initFromFile and string.sub(initFromFilePrefix, -1) ~= "/" then
+    initFromFilePrefix = initFromFilePrefix .. "/";
 end
 
 
