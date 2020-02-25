@@ -22,7 +22,8 @@ local displayPeriod         = 2000;
 local initFromCkpt          = false;
 local initFromCkptPath      = "runs/run17_LCA_init_rand/Checkpoints/Checkpoint";
 local initFromFile          = true;
-local initFromFilePrefix    = "imagenet_psx17_psy17_inH32_inW64_dsize1000/run14_LCAsoftthresh_Tau3000_VThresh0.075_finetuning_lower_vthresh_displayPeriod2000/Checkpoints/Checkpoint00002000";
+local initFromFilePath      = "imagenet_psx17_psy17_inH32_inW64_dsize1000/run12_softThresh_LCA_Tau4000_training/Checkpoints/Checkpoint00002000";
+local initFromFilePrefix    = nil;
 local learningRate          = 0.1;
 local modelType             = "LCA";
 local momentumTau           = 100;
@@ -33,33 +34,33 @@ local plasticity            = false;
 local sharedWeights         = true;
 local startFrame            = 0;
 local startTime             = 0;
-local stopTime              = math.ceil(numImages / nbatch) * displayPeriod *
-                                displayMultiple * numEpochs;
+local stopTime              = 8000; --math.ceil(numImages / nbatch) * displayPeriod *
+                                --displayMultiple * numEpochs;
 local strideX               = 1;
 local strideY               = 1;
 local temporalPatchSize     = 9;
 local threshType            = "soft";
 local timeConstantTau       = 3000;
 local useGPU                = true;
-local VThresh               = 0.075;
+local VThresh               = 0.125;
 
 
 --Probes and Checkpointing
 local adaptiveThreshProbe   = false;
 local checkpointPeriod      = 50; --displayPeriod * displayMultiple;
 local deleteOldCheckpoints  = false;
-local energyProbe           = true;
+local energyProbe           = false;
 local error2ModelWriteStep  = 50;
 local errorWriteStep        = 50;
 local firmThreshProbe       = false;
 local inputWriteStep        = 50;
-local l2Probe               = true;
+local l2Probe               = false;
 local model2ErrorWriteStep  = 50;
 local model2ReconWriteStep  = 50;
 local modelWriteStep        = 50;
 local numCheckpointsKept    = 2;
-local runNote               = "VThresh0.075_Test";
-local runVersion            = 17;
+local runNote               = "VThresh0.125_Test";
+local runVersion            = 18;
 
 
 local outputPath            = "runs/run" .. runVersion .. "_" .. modelType;
@@ -76,8 +77,8 @@ elseif threshType == "firm" then
 end
 
 
-if initFromFile and string.sub(initFromFilePrefix, -1) ~= "/" then
-    initFromFilePrefix = initFromFilePrefix .. "/";
+if initFromFile and string.sub(initFromFilePath, -1) ~= "/" then
+    initFromFilePath = initFromFilePath .. "/";
 end
 
 
@@ -302,6 +303,8 @@ for i_frame = 1, temporalPatchSize do
     end  -- if L2Probe
 
 
+
+    ------------------------------- LCA MODEL ---------------------------------
     if modelType == "LCA" then
         --Error layer
         pv.addGroup(pvParams,
@@ -332,9 +335,6 @@ for i_frame = 1, temporalPatchSize do
             }
         )
 
-   --------------------------------------------------------------------
-   --LCA Stack Connections---------------------------------------------
-   --------------------------------------------------------------------
 
         pv.addGroup(pvParams,
             inputLayer .. "To" .. errorLayer, {
@@ -456,17 +456,14 @@ for i_frame = 1, temporalPatchSize do
 
 
         if initFromFile then
-
             if initFromFilePrefix then
-                prefix = "S1";
+                filePath = initFromFilePath .. initFromFilePrefix .. "To" .. inputLayer .. "ReconError_W.pvp";
             else
-                prefix = modelLayer;
+                filePath = initFromFilePath .. modelLayer .. "To" .. inputLayer .. "ReconError_W.pvp";
             end
 
             pvParams[modelLayer .. "To" .. errorLayer].weightInitType  = "FileWeight";
-            pvParams[modelLayer .. "To" .. errorLayer].initWeightsFile = initFromFilePrefix ..
-                                                    prefix .. "To" .. inputLayer ..
-                                                    "ReconError_W.pvp";
+            pvParams[modelLayer .. "To" .. errorLayer].initWeightsFile = filePath;
         end
 
 
@@ -481,6 +478,7 @@ for i_frame = 1, temporalPatchSize do
         end
 
 
+    ------------------------------ STRF MODEL ---------------------------------
     elseif modelType == "STRF" then
         pv.addGroup(pvParams,
             modelLayer .. "To" .. inputLayer, {
@@ -535,17 +533,14 @@ for i_frame = 1, temporalPatchSize do
 
 
         if initFromFile then
-
             if initFromFilePrefix then
-                prefix = "S1";
+                filePath = initFromFilePath .. initFromFilePrefix .. "To" .. inputLayer .. "ReconError_W.pvp";
             else
-                prefix = modelLayer;
+                filePath = initFromFilePath .. modelLayer .. "To" .. inputLayer .. "ReconError_W.pvp";
             end
 
             pvParams[modelLayer .. "To" .. inputLayer].weightInitType  = "FileWeight";
-            pvParams[modelLayer .. "To" .. inputLayer].initWeightsFile = initFromFilePrefix ..
-                                                    prefix .. "To" .. inputLayer ..
-                                                    "ReconError_W.pvp";
+            pvParams[modelLayer .. "To" .. inputLayer].initWeightsFile = filePath;
         end
 
     end  -- if modelType == "LCA"
