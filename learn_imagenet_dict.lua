@@ -4,12 +4,12 @@ local pv = require "PVModule";
 
 
 -- Input Image Vars
-local imageInputPath        = "/home/mteti/Allen/LCAvsSTRF/filenames_train.txt";
+local imageInputPath        = "/home/mteti/Allen/LCAvsSTRF/filenames_test.txt";
 local inputFeatures         = 1;
 local inputHeight           = 32;
 local inputWidth            = 64;
-local nbatch                = 256;
-local numImages             = 1298523;
+local nbatch                = 4;
+local numImages             = 315176;
 
 
 -- Model Vars
@@ -19,8 +19,9 @@ local basePhase 	        = 2;
 local dictionarySize        = 1000;
 local displayMultiple       = 1;
 local displayPeriod         = 2000;
-local initFromCkpt          = true;
-local initFromFile          = false;
+local initFromCkpt          = false;
+local initFromCkptPath      = nil;
+local initFromFile          = true;
 local initFromFilePrefix    = nil;
 local learningRate          = 0.1;
 local modelType             = "LCA";
@@ -28,8 +29,8 @@ local momentumTau           = 100;
 local numEpochs             = 1;
 local patchSizeX            = 17;
 local patchSizeY            = 17;
-local plasticity            = true;
-local sharedWeights         = true;
+local plasticity            = false;
+local sharedWeights         = false;
 local startFrame            = 0;
 local startTime             = 0;
 local stopTime              = math.ceil(numImages / nbatch) * displayPeriod *
@@ -39,35 +40,29 @@ local strideY               = 1;
 local temporalPatchSize     = 9;
 local threshType            = "soft";
 local timeConstantTau       = 3000;
-local useGPU                = true;
-local VThresh               = 0.175;
+local useGPU                = false;
+local VThresh               = 0.075;
 
 
 --Probes and Checkpointing
-local adaptiveThreshProbe   = true;
-local checkpointPeriod      = displayPeriod * displayMultiple;
-local deleteOldCheckpoints  = true;
+local adaptiveThreshProbe   = false;
+local checkpointPeriod      = 50; --displayPeriod * displayMultiple;
+local deleteOldCheckpoints  = false;
 local energyProbe           = true;
-local error2ModelWriteStep  = -1;
-local errorWriteStep        = -1;
+local error2ModelWriteStep  = 50;
+local errorWriteStep        = 50;
 local firmThreshProbe       = false;
-local inputWriteStep        = -1;
+local inputWriteStep        = 50;
 local l2Probe               = true;
-local model2ErrorWriteStep  = -1;
-local model2ReconWriteStep  = -1;
-local modelWriteStep        = checkpointPeriod;
+local model2ErrorWriteStep  = 50;
+local model2ReconWriteStep  = 50;
+local modelWriteStep        = 50;
 local numCheckpointsKept    = 2;
-local runNote               = nil;
-local runVersion            = 15;
+local runNote               = "Test_VThresh0.075";
+local runVersion            = 17;
 
 
--- run names and output paths
-local outputPath  = "runs/run" .. runVersion .. "_" .. modelType;
-
-local initPath    = "imagenet_psx17_psy17_inH32_inW64_dsize1000/" ..
-                    "run14_LCAsoftthresh_Tau3000_VThresh0.075_finetuning_lower_vthresh_displayPeriod2000/" ..
-                    "Checkpoints/Checkpoint00002000";
-
+local outputPath            = "runs/run" .. runVersion .. "_" .. modelType;
 
 if runNote then
     outputPath = outputPath .. "_" .. runNote;
@@ -111,7 +106,7 @@ local pvParams = {
 }
 
 if initFromCkpt then
-   pvParams.column.initializeFromCheckpointDir = initPath;
+   pvParams.column.initializeFromCheckpointDir = initFromCkptPath;
 end
 
 
@@ -464,7 +459,7 @@ for i_frame = 1, temporalPatchSize do
             end
 
             pvParams[modelLayer .. "To" .. errorLayer].weightInitType  = "FileWeight";
-            pvParams[modelLayer .. "To" .. errorLayer].initWeightsFile = initPath ..
+            pvParams[modelLayer .. "To" .. errorLayer].initWeightsFile = initFromCkptPath ..
                                                     prefix .. "To" .. inputLayer ..
                                                     "ReconError_W.pvp";
         end
@@ -474,7 +469,7 @@ for i_frame = 1, temporalPatchSize do
             pvParams[modelLayer .. "To" .. errorLayer].normalizeMethod    = "normalizeGroup";
             pvParams[modelLayer .. "To" .. errorLayer].normalizeGroupName = modelLayer0 .. "To" .. inputLayer0 .. "Recon" .. "Error";
 
-            if not initPath then
+            if not initFromCkpt and not initFromFile then
                 pvParams[modelLayer .. "To" .. errorLayer].wMinInit     = 0;
                 pvParams[modelLayer .. "To" .. errorLayer].wMaxInit     = 0;
             end
@@ -543,7 +538,7 @@ for i_frame = 1, temporalPatchSize do
             end
 
             pvParams[modelLayer .. "To" .. inputLayer].weightInitType  = "FileWeight";
-            pvParams[modelLayer .. "To" .. inputLayer].initWeightsFile = initPath ..
+            pvParams[modelLayer .. "To" .. inputLayer].initWeightsFile = initFromCkptPath ..
                                                     prefix .. "To" .. inputLayer ..
                                                     "ReconError_W.pvp";
         end
