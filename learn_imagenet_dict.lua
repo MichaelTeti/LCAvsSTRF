@@ -62,7 +62,7 @@ local runVersion            = 15;
 
 
 -- run names and output paths
-local outputPath  = "runs/run" .. runVersion .. "_" .. modelType .. "_" .. runNote;
+local outputPath  = "runs/run" .. runVersion .. "_" .. modelType;
 
 local initPath    = "imagenet_psx17_psy17_inH32_inW64_dsize1000/" ..
                     "run14_LCAsoftthresh_Tau3000_VThresh0.075_finetuning_lower_vthresh_displayPeriod2000/" ..
@@ -70,7 +70,7 @@ local initPath    = "imagenet_psx17_psy17_inH32_inW64_dsize1000/" ..
 
 
 if runNote then
-    outputPath = outputPath .. "_" .. "note" .. runNote;
+    outputPath = outputPath .. "_" .. runNote;
 end
 
 
