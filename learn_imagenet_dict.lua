@@ -22,7 +22,7 @@ local displayPeriod         = 2000;
 local initFromCkpt          = false;
 local initFromCkptPath      = nil;
 local initFromFile          = true;
-local initFromFilePrefix    = nil;
+local initFromFilePrefix    = "/home/mteti/Allen/LCAvsSTRF/NonsharedWeights_VThresh0.075/";
 local learningRate          = 0.1;
 local modelType             = "LCA";
 local momentumTau           = 100;
@@ -459,7 +459,7 @@ for i_frame = 1, temporalPatchSize do
             end
 
             pvParams[modelLayer .. "To" .. errorLayer].weightInitType  = "FileWeight";
-            pvParams[modelLayer .. "To" .. errorLayer].initWeightsFile = initFromCkptPath ..
+            pvParams[modelLayer .. "To" .. errorLayer].initWeightsFile = initFromFilePrefix ..
                                                     prefix .. "To" .. inputLayer ..
                                                     "ReconError_W.pvp";
         end
@@ -538,7 +538,7 @@ for i_frame = 1, temporalPatchSize do
             end
 
             pvParams[modelLayer .. "To" .. inputLayer].weightInitType  = "FileWeight";
-            pvParams[modelLayer .. "To" .. inputLayer].initWeightsFile = initFromCkptPath ..
+            pvParams[modelLayer .. "To" .. inputLayer].initWeightsFile = initFromFilePrefix ..
                                                     prefix .. "To" .. inputLayer ..
                                                     "ReconError_W.pvp";
         end
