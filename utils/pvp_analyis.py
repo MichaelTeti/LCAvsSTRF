@@ -139,7 +139,6 @@ class PVAnalyzer():
         active_indices_sorted = [(x, y) for x, y in sorted(zip(active_total, feat_indices), reverse=True)]
         active_sorted = [x[0] for x in active_indices_sorted]
         feat_indices_sorted = [x[1] for x in active_indices_sorted]
-
         opts = dict(xlabel='Feature Number', ylabel='Fraction Active', title='Activations' + self.latest_analysis.split('-')[1])
         self.vis.bar(active_sorted, win='frac_act_total', opts=opts)
 
