@@ -1,4 +1,5 @@
 imagenet*/
+runs/
 *.png
 *.jpg
 *.jpeg 
