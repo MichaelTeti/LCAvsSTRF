@@ -9,7 +9,12 @@ from glob import glob
 from shutil import rmtree
 import csv
 from argparse import ArgumentParser
-from utils import get_current_time, get_sorted_files, bytescale_patch_np
+
+from utils import get_current_time, \
+                  get_sorted_files, \
+                  bytescale_patch_np, \
+                  get_fraction_active
+
 
 
 class SingleCkptAnalysis():
@@ -128,19 +133,9 @@ class SingleCkptAnalysis():
 
 
 
-    def get_fraction_active_total(self, ckpt_dir, save_dir):
+    def plot_fraction_active(self, ckpt_dir, save_dir):
         filename = os.path.join(ckpt_dir, self.model_layer_name + '_A.pvp')
-        data = pv.readpvpfile(filename)
-        data = np.array(data['values'])
-        n, h, w, f = data.shape
-
-        active = data != 0.0
-        active_total = list(np.sum(active, (0,1,2)) / (n*h*w))
-
-        feat_indices = list(range(len(active_total)))
-        active_indices_sorted = [(x, y) for x, y in sorted(zip(active_total, feat_indices), reverse=True)]
-        active_sorted = [x[0] for x in active_indices_sorted]
-        feat_indices_sorted = [x[1] for x in active_indices_sorted]
+        active_sorted, feat_indices_sorted = get_fraction_active(filename)
         opts = dict(xlabel='Feature Number', ylabel='Fraction Active', title='Activations' + self.latest_analysis.split('-')[1])
         self.vis.bar(active_sorted, win='frac_act_total', opts=opts)
 
@@ -225,7 +220,7 @@ class SingleCkptAnalysis():
                 os.mkdir(save_dir)
                 act_fname = os.path.join(current_ckpt_dir, self.model_layer_name + '_A.pvp')
 
-                sorted_feat_indices, sorted_activations = self.get_fraction_active_total(current_ckpt_dir, save_dir)
+                sorted_feat_indices, sorted_activations = self.plot_fraction_active(current_ckpt_dir, save_dir)
                 self.montage_weights(current_ckpt_dir, save_dir, sorted_feat_indices)
                 self.plot_recs(current_ckpt_dir, save_dir)
                 self.plot_energy(save_dir)

@@ -3,6 +3,7 @@ import numpy as np
 from glob import glob
 import os
 import csv
+import pvtools as pv
 
 
 def read_csv(fname):
@@ -52,3 +53,19 @@ def get_sorted_files(dir, keyword=None, add_parent=False):
     fnames.sort()
 
     return fnames
+
+
+def get_fraction_active(filename):
+    data = pv.readpvpfile(filename)
+    data = np.array(data['values'])
+    n, h, w, f = data.shape
+
+    active = data != 0.0
+    active_total = list(np.sum(active, (0,1,2)) / (n*h*w))
+
+    feat_indices = list(range(len(active_total)))
+    active_indices_sorted = [(x, y) for x, y in sorted(zip(active_total, feat_indices), reverse=True)]
+    active_sorted = [x[0] for x in active_indices_sorted]
+    feat_indices_sorted = [x[1] for x in active_indices_sorted]
+
+    return active_sorted, feat_indices_sorted
