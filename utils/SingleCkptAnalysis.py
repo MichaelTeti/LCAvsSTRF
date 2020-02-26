@@ -9,7 +9,7 @@ from glob import glob
 from shutil import rmtree
 import csv
 from argparse import ArgumentParser
-from common_utilities import get_current_time, get_sorted_files, bytescale_patch_np
+from utils import get_current_time, get_sorted_files, bytescale_patch_np
 
 
 class SingleCkptAnalysis():
