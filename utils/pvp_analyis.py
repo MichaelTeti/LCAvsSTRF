@@ -16,7 +16,7 @@ class PVAnalyzer():
                  ckpt_freq=10000, weight_gif=True, recon_gif=True):
         self.vis = Visdom()
         self.check_frequency = check_frequency
-        self.ckpt_dir = os.path.join(os.path.abspath(ckpt_dir), 'Checkpoints')
+        self.ckpt_dir = ckpt_dir
         self.analysis_dir = ckpt_dir
         self.latest_analysis = self.get_latest_analyses(self.analysis_dir)
         self.delete_old_analyses = delete_old_analyses
