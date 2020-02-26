@@ -150,66 +150,69 @@ class PVAnalyzer():
     def plot_energy(self, save_dir):
         file_inds = np.sort([int(f.split('_')[-1][:-4]) for f in os.listdir(self.analysis_dir) if 'EnergyProbe_' in f])
         names = ['EnergyProbe_batchElement_{}'.format(f) for f in file_inds]
-        save_dir = os.path.join(save_dir, 'Energy')
+        if names != []:
+            save_dir = os.path.join(save_dir, 'Energy')
 
-        if not os.path.isdir(save_dir):
-            os.mkdir(save_dir)
+            if not os.path.isdir(save_dir):
+                os.mkdir(save_dir)
 
-        for i_name, name in enumerate(names):
-            file_path = os.path.join(self.analysis_dir, name + '.txt')
-            data = np.genfromtxt(file_path, delimiter=',', skip_header=1)
-            end_x = [t for t in data[:, 0]  if t % self.ckpt_freq == 0]
-            end_x = int(max(end_x)) if end_x != [] else 0
-            start_x = end_x - self.ckpt_freq if end_x != 0 else 0
-            end_x = data.shape[0] if end_x == 0 else end_x
-            data = data[start_x:end_x, :]
+            for i_name, name in enumerate(names):
+                file_path = os.path.join(self.analysis_dir, name + '.txt')
+                data = np.genfromtxt(file_path, delimiter=',', skip_header=1)
+                end_x = [t for t in data[:, 0]  if t % self.ckpt_freq == 0]
+                end_x = int(max(end_x)) if end_x != [] else 0
+                start_x = end_x - self.ckpt_freq if end_x != 0 else 0
+                end_x = data.shape[0] if end_x == 0 else end_x
+                data = data[start_x:end_x, :]
 
-            fig = plt.figure(figsize=(20, 15))
-            subplot = fig.add_subplot(111)
-            subplot.set_ylabel('Energy')
-            subplot.set_xlabel('Timestep')
-            subplot.plot(data[:, 0], data[:, -1])
-            plt.savefig(os.path.join(save_dir, name))
-            plt.close()
+                fig = plt.figure(figsize=(20, 15))
+                subplot = fig.add_subplot(111)
+                subplot.set_ylabel('Energy')
+                subplot.set_xlabel('Timestep')
+                subplot.plot(data[:, 0], data[:, -1])
+                plt.savefig(os.path.join(save_dir, name))
+                plt.close()
 
 
 
     def plot_adaptivetimescales(self, save_dir):
         file_inds = np.sort([int(f.split('_')[-1][:-4]) for f in os.listdir(self.analysis_dir) if 'AdaptiveTimeScales_' in f])
         names = ['AdaptiveTimeScales_batchElement_{}'.format(f) for f in file_inds]
-        save_dir = os.path.join(save_dir, 'AdaptiveTimeScales')
 
-        if not os.path.isdir(save_dir):
-            os.mkdir(save_dir)
+        if names != []:
+            save_dir = os.path.join(save_dir, 'AdaptiveTimeScales')
 
-        for i_name, name in enumerate(names):
-            file_path = os.path.join(self.analysis_dir, name + '.txt')
+            if not os.path.isdir(save_dir):
+                os.mkdir(save_dir)
 
-            with open(file_path, 'r+') as txtfile:
-                reader = csv.reader(txtfile, delimiter=',')
-                timescale_data = {'Timescale': [], 'TimescaleTrue': [], 'TimescaleMax': [], 'Time': []}
+            for i_name, name in enumerate(names):
+                file_path = os.path.join(self.analysis_dir, name + '.txt')
 
-                for i_row, row in enumerate(reader):
-                    if len(row) == 1:
-                        timescale_data['Time'].append(float(row[0].split(' = ')[-1]))
-                    else:
-                        timescale_data['Timescale'].append(float(row[1].split(' = ')[-1]))
-                        timescale_data['TimescaleTrue'].append(float(row[2].split(' = ')[-1]))
-                        timescale_data['TimescaleMax'].append(float(row[3].split(' = ')[-1]))
+                with open(file_path, 'r+') as txtfile:
+                    reader = csv.reader(txtfile, delimiter=',')
+                    timescale_data = {'Timescale': [], 'TimescaleTrue': [], 'TimescaleMax': [], 'Time': []}
 
-            end_x = [t for t in timescale_data['Time']  if t % self.ckpt_freq == 0]
-            end_x = int(max(end_x)) if end_x != [] else 0
-            start_x = end_x - self.ckpt_freq if end_x != 0 else 0
-            end_x = len(timescale_data['Time']) if end_x == 0 else end_x
+                    for i_row, row in enumerate(reader):
+                        if len(row) == 1:
+                            timescale_data['Time'].append(float(row[0].split(' = ')[-1]))
+                        else:
+                            timescale_data['Timescale'].append(float(row[1].split(' = ')[-1]))
+                            timescale_data['TimescaleTrue'].append(float(row[2].split(' = ')[-1]))
+                            timescale_data['TimescaleMax'].append(float(row[3].split(' = ')[-1]))
 
-            for key in list(timescale_data.keys())[:-1]:
-                fig = plt.figure(figsize=(20, 15))
-                subplot = fig.add_subplot(111)
-                subplot.set_ylabel(key)
-                subplot.set_xlabel('Time')
-                subplot.plot(timescale_data['Time'][start_x:end_x], timescale_data[key][start_x:end_x])
-                plt.savefig(os.path.join(save_dir, name + '_' + key))
-                plt.close()
+                end_x = [t for t in timescale_data['Time']  if t % self.ckpt_freq == 0]
+                end_x = int(max(end_x)) if end_x != [] else 0
+                start_x = end_x - self.ckpt_freq if end_x != 0 else 0
+                end_x = len(timescale_data['Time']) if end_x == 0 else end_x
+
+                for key in list(timescale_data.keys())[:-1]:
+                    fig = plt.figure(figsize=(20, 15))
+                    subplot = fig.add_subplot(111)
+                    subplot.set_ylabel(key)
+                    subplot.set_xlabel('Time')
+                    subplot.plot(timescale_data['Time'][start_x:end_x], timescale_data[key][start_x:end_x])
+                    plt.savefig(os.path.join(save_dir, name + '_' + key))
+                    plt.close()
 
 
 
