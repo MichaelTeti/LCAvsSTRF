@@ -25,11 +25,23 @@ def bytescale_patch_np(patch):
     return patch * 255
 
 
+def get_sorted_files(dir, keyword=None, add_parent=False):
+    if keyword:
+        fnames = glob(os.path.join(dir, keyword))
+        if not add_parent: fnames = [os.path.split(f)[1] for f in fnames]
+    else:
+        fnames = [os.path.join(dir, f) for f in os.listdir(dir)] if add_parent else os.listdir(dir)
+
+    fnames.sort()
+
+    return fnames
+
+
 
 class SingleCkptAnalysis():
     def __init__(self, ckpt_dir, analysis_dir, check_frequency=120,
                  delete_old_analyses=True, ckpt_freq=4000, weight_gif=True,
-                 recon_gif=True, model_layer_name='S1'):
+                 recon_gif=True, model_layer_name='S1', probe_file_dir=None):
         self.vis = Visdom()
         self.check_frequency = check_frequency
         self.ckpt_dir = ckpt_dir
@@ -40,25 +52,23 @@ class SingleCkptAnalysis():
         self.weight_gif = weight_gif
         self.recon_gif = recon_gif
         self.model_layer_name = model_layer_name
+        self.probe_file_dir = probe_file_dir
 
         print('[INFO] CHECKPOINT DIR: {}'.format(self.ckpt_dir))
         print('[INFO] ANALYSIS DIR: {}'.format(self.analysis_dir))
         print('[INFO] LATEST EXISTING ANALYSIS: {}'.format(self.latest_analysis))
 
-        self.analyze()
 
 
     def get_latest_analyses(self, dir):
         if not os.path.isdir(dir): os.mkdir(dir)
-        existing = [f for f in os.listdir(dir) if 'analysis' in f]
-        existing.sort()
+        existing = get_sorted_files(dir, 'analysis*', add_parent=False)
 
         return existing[-1] if any(existing) else None
 
 
     def get_current_ckpt(self):
-        current_ckpts = os.listdir(self.ckpt_dir)
-        current_ckpts.sort()
+        current_ckpts = get_sorted_files(self.ckpt_dir, add_parent=False)
         latest_ckpt = current_ckpts[-1]
         latest_ckpt_path = os.path.join(self.ckpt_dir, latest_ckpt)
         latest_ckpt_num = latest_ckpt.split('Checkpoint')[-1]
@@ -67,8 +77,9 @@ class SingleCkptAnalysis():
 
 
     def montage_weights(self, ckpt_dir, save_dir, sorted_indices):
-        weight_filenames = [os.path.join(ckpt_dir, f) for f in os.listdir(ckpt_dir) if '_W.pvp' in f]
-        weight_filenames.sort()
+        weight_filenames = get_sorted_files(ckpt_dir, keyword='*_W.pvp', add_parent=True)
+        #weight_filenames = [os.path.join(ckpt_dir, f) for f in os.listdir(ckpt_dir) if '_W.pvp' in f]
+        #weight_filenames.sort()
         save_dir = os.path.join(save_dir, 'Weights')
         os.mkdir(save_dir)
         gif = [] if self.weight_gif else None
@@ -101,11 +112,9 @@ class SingleCkptAnalysis():
 
 
 
-
     def plot_recs(self, ckpt_dir, save_dir):
-        rec_paths = glob(os.path.join(ckpt_dir, 'Frame*Recon_A.pvp'))
+        rec_paths = get_sorted_files(ckpt_dir, keyword='Frame*Recon_A.pvp', add_parent=True)
         if rec_paths == []: return
-        rec_paths.sort()
         save_dir = os.path.join(save_dir, 'Recons')
         gifs = {} if self.recon_gif else None
 
@@ -145,9 +154,8 @@ class SingleCkptAnalysis():
 
 
 
-
-    def get_fraction_active_total(self, filename, save_dir):
-        ckpt_path, data_name = os.path.split(filename)
+    def get_fraction_active_total(self, ckpt_dir, save_dir):
+        filename = os.path.join(ckpt_dir, self.model_layer_name + '_A.pvp')
         data = pv.readpvpfile(filename)
         data = np.array(data['values'])
         n, h, w, f = data.shape
@@ -166,19 +174,16 @@ class SingleCkptAnalysis():
 
 
 
-
     def plot_energy(self, save_dir):
-        file_inds = np.sort([int(f.split('_')[-1][:-4]) for f in os.listdir(self.analysis_dir) if 'EnergyProbe_' in f])
-        names = ['EnergyProbe_batchElement_{}'.format(f) for f in file_inds]
-        if names == []: return
+        if not self.probe_file_dir: return
+        files = get_sorted_files(self.probe_file_dir, keyword='EnergyProbe_*', add_parent=True)
+        if files == []: return
         save_dir = os.path.join(save_dir, 'Energy')
+        if not os.path.isdir(save_dir): os.mkdir(save_dir)
 
-        if not os.path.isdir(save_dir):
-            os.mkdir(save_dir)
-
-        for i_name, name in enumerate(names):
-            file_path = os.path.join(self.analysis_dir, name + '.txt')
-            data = np.genfromtxt(file_path, delimiter=',', skip_header=1)
+        for i_file, file in enumerate(files):
+            name = os.path.split(file)[1].split('.')[0] + '.png'
+            data = np.genfromtxt(file, delimiter=',', skip_header=1)
             end_x = [t for t in data[:, 0]  if t % self.ckpt_freq == 0]
             end_x = int(max(end_x)) if end_x != [] else 0
             start_x = end_x - self.ckpt_freq if end_x != 0 else 0
@@ -196,18 +201,16 @@ class SingleCkptAnalysis():
 
 
     def plot_adaptivetimescales(self, save_dir):
-        file_inds = np.sort([int(f.split('_')[-1][:-4]) for f in os.listdir(self.analysis_dir) if 'AdaptiveTimeScales_' in f])
-        names = ['AdaptiveTimeScales_batchElement_{}'.format(f) for f in file_inds]
-        if names == []: return
+        if not self.probe_file_dir: return
+        files = get_sorted_files(self.probe_file_dir, keyword='AdaptiveTimeScales*', add_parent=True)
+        if files == []: return
         save_dir = os.path.join(save_dir, 'AdaptiveTimeScales')
+        if not os.path.isdir(save_dir): os.mkdir(save_dir)
 
-        if not os.path.isdir(save_dir):
-            os.mkdir(save_dir)
+        for i_file, file in enumerate(files):
+            name = os.path.split(file)[1].split('.')[0]
 
-        for i_name, name in enumerate(names):
-            file_path = os.path.join(self.analysis_dir, name + '.txt')
-
-            with open(file_path, 'r+') as txtfile:
+            with open(file, 'r+') as txtfile:
                 reader = csv.reader(txtfile, delimiter=',')
                 timescale_data = {'Timescale': [], 'TimescaleTrue': [], 'TimescaleMax': [], 'Time': []}
 
@@ -230,16 +233,13 @@ class SingleCkptAnalysis():
                 subplot.set_ylabel(key)
                 subplot.set_xlabel('Time')
                 subplot.plot(timescale_data['Time'][start_x:end_x], timescale_data[key][start_x:end_x])
-                plt.savefig(os.path.join(save_dir, name + '_' + key))
+                plt.savefig(os.path.join(save_dir, name + '_' + key + '.png'))
                 plt.close()
-
-
 
 
 
     def analyze(self):
         while True:
-            sleep(self.check_frequency)
             _, current_ckpt_dir, current_ckpt_num = self.get_current_ckpt()
 
             if 'analysis-' + current_ckpt_num != self.latest_analysis:
@@ -250,16 +250,20 @@ class SingleCkptAnalysis():
                 save_dir = os.path.join(self.analysis_dir, self.latest_analysis)
                 os.mkdir(save_dir)
                 act_fname = os.path.join(current_ckpt_dir, self.model_layer_name + '_A.pvp')
-                sorted_feat_indices, sorted_activations = self.get_fraction_active_total(act_fname, save_dir)
+
+                sorted_feat_indices, sorted_activations = self.get_fraction_active_total(current_ckpt_dir, save_dir)
                 self.montage_weights(current_ckpt_dir, save_dir, sorted_feat_indices)
                 self.plot_recs(current_ckpt_dir, save_dir)
                 self.plot_energy(save_dir)
                 self.plot_adaptivetimescales(save_dir)
+
                 print('[INFO] ANALYSIS {} WRITE COMPLETE.'.format(current_ckpt_num))
 
                 if self.delete_old_analyses and len(glob(os.path.join(self.analysis_dir, 'analysis-*'))) > 1:
                     print('[INFO] REMOVING OLD ANALYSIS FILES.')
                     [rmtree(f) for f in glob(os.path.join(self.analysis_dir, 'analysis-*')) if f != save_dir]
+
+            sleep(self.check_frequency)
 
 
 
@@ -283,6 +287,9 @@ if __name__ == '__main__':
                         type=str,
                         default='S1',
                         help='Model layer name.')
+    parser.add_argument('--probe_file_dir',
+                        type=str,
+                        help='Path to directory containing the probe files.')
 
     args = parser.parse_args()
 
@@ -292,4 +299,7 @@ if __name__ == '__main__':
                                   weight_gif=True,
                                   recon_gif=True,
                                   ckpt_freq=args.ckpt_frequency,
-                                  model_layer_name=args.model_layer_name)
+                                  model_layer_name=args.model_layer_name,
+                                  probe_file_dir=args.probe_file_dir)
+
+    analyzer.analyze()
