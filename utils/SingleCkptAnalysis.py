@@ -9,33 +9,7 @@ from glob import glob
 from shutil import rmtree
 import csv
 from argparse import ArgumentParser
-
-
-def get_current_time():
-    year, month, day, hour, min, sec, _, _, _ = localtime()
-    min = min if len(str(min)) == 2 else '0' + str(min)
-    sec = sec if len(str(sec)) == 2 else '0' + str(sec)
-    return year, month, day, hour, min, sec
-
-
-def bytescale_patch_np(patch):
-    patch = patch - np.amin(patch)
-    patch = patch / (np.amax(patch) + 1e-6)
-
-    return patch * 255
-
-
-def get_sorted_files(dir, keyword=None, add_parent=False):
-    if keyword:
-        fnames = glob(os.path.join(dir, keyword))
-        if not add_parent: fnames = [os.path.split(f)[1] for f in fnames]
-    else:
-        fnames = [os.path.join(dir, f) for f in os.listdir(dir)] if add_parent else os.listdir(dir)
-
-    fnames.sort()
-
-    return fnames
-
+from common_utilities import get_current_time, get_sorted_files, bytescale_patch_np
 
 
 class SingleCkptAnalysis():
