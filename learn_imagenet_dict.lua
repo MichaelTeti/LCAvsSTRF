@@ -18,14 +18,14 @@ local AMin                  = 0;
 local basePhase             = 2;
 local dictionarySize        = 1000;
 local displayMultiple       = 1;
-local displayPeriod         = 1;
+local displayPeriod         = 4000;
 local initFromCkpt          = false;
 local initFromCkptPath      = "runs/run17_LCA_init_rand/Checkpoints/Checkpoint";
 local initFromFile          = true;
-local initFromFilePath      = "imagenet_psx17_psy17_inH32_inW64_dsize1000/run15_LCAsoftthresh_timeConst3000_VThresh0.175_displayPeriod2000/Checkpoints/Checkpoint00008000/";
-local initFromFilePrefix    = "S1";
+local initFromFilePath      = "imagenet_psx17_psy17_inH32_inW64_dsize1000/run12_softThresh_LCA_Tau4000_training/Checkpoints/Checkpoint00002000/";
+local initFromFilePrefix    = nil;
 local learningRate          = 0.1;
-local modelType             = "STRF";
+local modelType             = "LCA";
 local momentumTau           = 100;
 local numEpochs             = 1;
 local patchSizeX            = 17;
@@ -34,7 +34,7 @@ local plasticity            = false;
 local sharedWeights         = true;
 local startFrame            = 0;
 local startTime             = 0;
-local stopTime              = 1; --math.ceil(numImages / nbatch) * displayPeriod *
+local stopTime              = 4000; --math.ceil(numImages / nbatch) * displayPeriod *
                                 --displayMultiple * numEpochs;
 local strideX               = 1;
 local strideY               = 1;
@@ -42,25 +42,25 @@ local temporalPatchSize     = 9;
 local threshType            = "soft";
 local timeConstantTau       = 3000;
 local useGPU                = true;
-local VThresh               = 0.175;
+local VThresh               = 0.125;
 
 
 --Probes and Checkpointing
 local adaptiveThreshProbe   = false;
-local checkpointPeriod      = 1; --displayPeriod * displayMultiple;
+local checkpointPeriod      = 50; --displayPeriod * displayMultiple;
 local deleteOldCheckpoints  = false;
 local energyProbe           = false;
 local error2ModelWriteStep  = -1;
 local errorWriteStep        = -1;
 local firmThreshProbe       = false;
-local inputWriteStep        = 1;
+local inputWriteStep        = 50;
 local l2Probe               = false;
 local model2ErrorWriteStep  = -1;
 local model2ReconWriteStep  = -1;
-local modelWriteStep        = 1;
+local modelWriteStep        = 50;
 local numCheckpointsKept    = 2;
-local runNote               = "VThresh0.175_Test";
-local runVersion            = 17;
+local runNote               = "VThresh0.125_Test";
+local runVersion            = 19;
 
 
 local outputPath            = "runs/run" .. runVersion .. "_" .. modelType;
