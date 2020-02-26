@@ -27,13 +27,13 @@ def bytescale_patch_np(patch):
 
 
 class SingleCkptAnalysis():
-    def __init__(self, ckpt_dir, check_frequency=120, delete_old_analyses=True,
-                 ckpt_freq=4000, weight_gif=True, recon_gif=True,
-                 model_layer_name='S1'):
+    def __init__(self, ckpt_dir, analysis_dir, check_frequency=120,
+                 delete_old_analyses=True, ckpt_freq=4000, weight_gif=True,
+                 recon_gif=True, model_layer_name='S1'):
         self.vis = Visdom()
         self.check_frequency = check_frequency
         self.ckpt_dir = ckpt_dir
-        self.analysis_dir = ckpt_dir
+        self.analysis_dir = analysis_dir
         self.latest_analysis = self.get_latest_analyses(self.analysis_dir)
         self.delete_old_analyses = delete_old_analyses
         self.ckpt_freq = ckpt_freq
@@ -49,6 +49,7 @@ class SingleCkptAnalysis():
 
 
     def get_latest_analyses(self, dir):
+        if not os.path.isdir(dir): os.mkdir(dir)
         existing = [f for f in os.listdir(dir) if 'analysis' in f]
         existing.sort()
 
@@ -257,7 +258,7 @@ class SingleCkptAnalysis():
                 print('[INFO] ANALYSIS {} WRITE COMPLETE.'.format(current_ckpt_num))
 
                 if self.delete_old_analyses and len(glob(os.path.join(self.analysis_dir, 'analysis-*'))) > 1:
-                    print('[INFO] REMOVING OLD ANALYSIS FILES')
+                    print('[INFO] REMOVING OLD ANALYSIS FILES.')
                     [rmtree(f) for f in glob(os.path.join(self.analysis_dir, 'analysis-*')) if f != save_dir]
 
 
@@ -265,8 +266,11 @@ class SingleCkptAnalysis():
 if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('ckpt_dir',
-        type=str,
-        help='Path to the checkpoint files.')
+                        type=str,
+                        help='Path to the checkpoint files.')
+    parser.add_argument('analysis_dir',
+                        type=str,
+                        help='Path to save analysis files.')
     parser.add_argument('--check_frequency',
                         type=int,
                         default=600,
@@ -283,6 +287,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     analyzer = SingleCkptAnalysis(args.ckpt_dir,
+                                  args.analysis_dir,
                                   args.check_frequency,
                                   weight_gif=True,
                                   recon_gif=True,
