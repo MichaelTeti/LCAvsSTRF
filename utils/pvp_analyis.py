@@ -13,7 +13,8 @@ from argparse import ArgumentParser
 
 class PVAnalyzer():
     def __init__(self, ckpt_dir, check_frequency=120, delete_old_analyses=True,
-                 ckpt_freq=10000, weight_gif=True, recon_gif=True):
+                 ckpt_freq=10000, weight_gif=True, recon_gif=True,
+                 model_layer_name='S1'):
         self.vis = Visdom()
         self.check_frequency = check_frequency
         self.ckpt_dir = ckpt_dir
@@ -23,6 +24,7 @@ class PVAnalyzer():
         self.ckpt_freq = ckpt_freq
         self.weight_gif = weight_gif
         self.recon_gif = recon_gif
+        self.model_layer_name = model_layer_name
 
         print('[INFO] CHECKPOINT DIR: {}'.format(self.ckpt_dir))
         print('[INFO] ANALYSIS DIR: {}'.format(self.analysis_dir))
@@ -236,7 +238,7 @@ class PVAnalyzer():
                 self.latest_analysis = 'analysis-' + current_ckpt_num
                 save_dir = os.path.join(self.analysis_dir, self.latest_analysis)
                 os.mkdir(save_dir)
-                sorted_feat_indices = self.get_fraction_active_total(os.path.join(current_ckpt_dir, 'S1_A.pvp'), save_dir)
+                sorted_feat_indices = self.get_fraction_active_total(os.path.join(current_ckpt_dir, self.model_layer_name + '_A.pvp'), save_dir)
                 self.montage_weights(current_ckpt_dir, save_dir, sorted_feat_indices)
                 self.plot_recs(current_ckpt_dir, save_dir)
                 self.plot_energy(save_dir)
@@ -262,6 +264,10 @@ if __name__ == '__main__':
                         type=int,
                         default=1000,
                         help='How long the display period is. Default 1000 timesteps.')
+    parser.add_argument('--model_layer_name',
+                        type=str,
+                        default='S1',
+                        help='Model layer name.')
 
     args = parser.parse_args()
 
@@ -269,4 +275,5 @@ if __name__ == '__main__':
                           args.check_frequency,
                           weight_gif=True,
                           recon_gif=True,
-                          ckpt_freq=args.ckpt_frequency)
+                          ckpt_freq=args.ckpt_frequency,
+                          model_layer_name=args.model_layer_name)
