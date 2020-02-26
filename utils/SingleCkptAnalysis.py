@@ -11,6 +11,21 @@ import csv
 from argparse import ArgumentParser
 
 
+def get_current_time():
+    year, month, day, hour, min, sec, _, _, _ = localtime()
+    min = min if len(str(min)) == 2 else '0' + str(min)
+    sec = sec if len(str(sec)) == 2 else '0' + str(sec)
+    return year, month, day, hour, min, sec
+
+
+def bytescale_patch_np(patch):
+    patch = patch - np.amin(patch)
+    patch = patch / (np.amax(patch) + 1e-6)
+
+    return patch * 255
+
+
+
 class SingleCkptAnalysis():
     def __init__(self, ckpt_dir, check_frequency=120, delete_old_analyses=True,
                  ckpt_freq=4000, weight_gif=True, recon_gif=True,
@@ -40,13 +55,14 @@ class SingleCkptAnalysis():
         return existing[-1] if any(existing) else None
 
 
+    def get_current_ckpt(self):
+        current_ckpts = os.listdir(self.ckpt_dir)
+        current_ckpts.sort()
+        latest_ckpt = current_ckpts[-1]
+        latest_ckpt_path = os.path.join(self.ckpt_dir, latest_ckpt)
+        latest_ckpt_num = latest_ckpt.split('Checkpoint')[-1]
 
-    def bytescale_patch_np(self, patch):
-        patch = patch - np.amin(patch)
-        patch = patch / (np.amax(patch) + 1e-6)
-
-        return patch * 255
-
+        return latest_ckpt, latest_ckpt_path, latest_ckpt_num
 
 
     def montage_weights(self, ckpt_dir, save_dir, sorted_indices):
@@ -69,7 +85,7 @@ class SingleCkptAnalysis():
             for i_h in range(0, gridh, h):
                 for i_w in range(0, gridw, w):
                     if count < f:
-                        grid[i_h:i_h+h, i_w:i_w+w] = self.bytescale_patch_np(weights[count, ...])
+                        grid[i_h:i_h+h, i_w:i_w+w] = bytescale_patch_np(weights[count, ...])
                         count += 1
 
             grid[::h, :] = 255.
@@ -87,6 +103,7 @@ class SingleCkptAnalysis():
 
     def plot_recs(self, ckpt_dir, save_dir):
         rec_paths = glob(os.path.join(ckpt_dir, 'Frame*Recon_A.pvp'))
+        if rec_paths == []: return
         rec_paths.sort()
         save_dir = os.path.join(save_dir, 'Recons')
         gifs = {} if self.recon_gif else None
@@ -110,7 +127,7 @@ class SingleCkptAnalysis():
                     gifs[i_example] = []
 
                 input_ex, rec_ex = input_ex[..., 0], rec_ex[..., 0]
-                input_scaled, rec_scaled = self.bytescale_patch_np(input_ex), self.bytescale_patch_np(rec_ex)
+                input_scaled, rec_scaled = bytescale_patch_np(input_ex), bytescale_patch_np(rec_ex)
 
                 if np.sum(rec_scaled) == 0 and int(''.join([c for c in self.latest_analysis if c.isdigit()])) != 0:
                     print('[WARNING] BATCH {} EXPLODED'.format(os.path.split(rec_path)[1]))
@@ -152,69 +169,68 @@ class SingleCkptAnalysis():
     def plot_energy(self, save_dir):
         file_inds = np.sort([int(f.split('_')[-1][:-4]) for f in os.listdir(self.analysis_dir) if 'EnergyProbe_' in f])
         names = ['EnergyProbe_batchElement_{}'.format(f) for f in file_inds]
-        if names != []:
-            save_dir = os.path.join(save_dir, 'Energy')
+        if names == []: return
+        save_dir = os.path.join(save_dir, 'Energy')
 
-            if not os.path.isdir(save_dir):
-                os.mkdir(save_dir)
+        if not os.path.isdir(save_dir):
+            os.mkdir(save_dir)
 
-            for i_name, name in enumerate(names):
-                file_path = os.path.join(self.analysis_dir, name + '.txt')
-                data = np.genfromtxt(file_path, delimiter=',', skip_header=1)
-                end_x = [t for t in data[:, 0]  if t % self.ckpt_freq == 0]
-                end_x = int(max(end_x)) if end_x != [] else 0
-                start_x = end_x - self.ckpt_freq if end_x != 0 else 0
-                end_x = data.shape[0] if end_x == 0 else end_x
-                data = data[start_x:end_x, :]
+        for i_name, name in enumerate(names):
+            file_path = os.path.join(self.analysis_dir, name + '.txt')
+            data = np.genfromtxt(file_path, delimiter=',', skip_header=1)
+            end_x = [t for t in data[:, 0]  if t % self.ckpt_freq == 0]
+            end_x = int(max(end_x)) if end_x != [] else 0
+            start_x = end_x - self.ckpt_freq if end_x != 0 else 0
+            end_x = data.shape[0] if end_x == 0 else end_x
+            data = data[start_x:end_x, :]
 
-                fig = plt.figure(figsize=(20, 15))
-                subplot = fig.add_subplot(111)
-                subplot.set_ylabel('Energy')
-                subplot.set_xlabel('Timestep')
-                subplot.plot(data[:, 0], data[:, -1])
-                plt.savefig(os.path.join(save_dir, name))
-                plt.close()
+            fig = plt.figure(figsize=(20, 15))
+            subplot = fig.add_subplot(111)
+            subplot.set_ylabel('Energy')
+            subplot.set_xlabel('Timestep')
+            subplot.plot(data[:, 0], data[:, -1])
+            plt.savefig(os.path.join(save_dir, name))
+            plt.close()
 
 
 
     def plot_adaptivetimescales(self, save_dir):
         file_inds = np.sort([int(f.split('_')[-1][:-4]) for f in os.listdir(self.analysis_dir) if 'AdaptiveTimeScales_' in f])
         names = ['AdaptiveTimeScales_batchElement_{}'.format(f) for f in file_inds]
+        if names == []: return
+        save_dir = os.path.join(save_dir, 'AdaptiveTimeScales')
 
-        if names != []:
-            save_dir = os.path.join(save_dir, 'AdaptiveTimeScales')
+        if not os.path.isdir(save_dir):
+            os.mkdir(save_dir)
 
-            if not os.path.isdir(save_dir):
-                os.mkdir(save_dir)
+        for i_name, name in enumerate(names):
+            file_path = os.path.join(self.analysis_dir, name + '.txt')
 
-            for i_name, name in enumerate(names):
-                file_path = os.path.join(self.analysis_dir, name + '.txt')
+            with open(file_path, 'r+') as txtfile:
+                reader = csv.reader(txtfile, delimiter=',')
+                timescale_data = {'Timescale': [], 'TimescaleTrue': [], 'TimescaleMax': [], 'Time': []}
 
-                with open(file_path, 'r+') as txtfile:
-                    reader = csv.reader(txtfile, delimiter=',')
-                    timescale_data = {'Timescale': [], 'TimescaleTrue': [], 'TimescaleMax': [], 'Time': []}
+                for i_row, row in enumerate(reader):
+                    if len(row) == 1:
+                        timescale_data['Time'].append(float(row[0].split(' = ')[-1]))
+                    else:
+                        timescale_data['Timescale'].append(float(row[1].split(' = ')[-1]))
+                        timescale_data['TimescaleTrue'].append(float(row[2].split(' = ')[-1]))
+                        timescale_data['TimescaleMax'].append(float(row[3].split(' = ')[-1]))
 
-                    for i_row, row in enumerate(reader):
-                        if len(row) == 1:
-                            timescale_data['Time'].append(float(row[0].split(' = ')[-1]))
-                        else:
-                            timescale_data['Timescale'].append(float(row[1].split(' = ')[-1]))
-                            timescale_data['TimescaleTrue'].append(float(row[2].split(' = ')[-1]))
-                            timescale_data['TimescaleMax'].append(float(row[3].split(' = ')[-1]))
+            end_x = [t for t in timescale_data['Time']  if t % self.ckpt_freq == 0]
+            end_x = int(max(end_x)) if end_x != [] else 0
+            start_x = end_x - self.ckpt_freq if end_x != 0 else 0
+            end_x = len(timescale_data['Time']) if end_x == 0 else end_x
 
-                end_x = [t for t in timescale_data['Time']  if t % self.ckpt_freq == 0]
-                end_x = int(max(end_x)) if end_x != [] else 0
-                start_x = end_x - self.ckpt_freq if end_x != 0 else 0
-                end_x = len(timescale_data['Time']) if end_x == 0 else end_x
-
-                for key in list(timescale_data.keys())[:-1]:
-                    fig = plt.figure(figsize=(20, 15))
-                    subplot = fig.add_subplot(111)
-                    subplot.set_ylabel(key)
-                    subplot.set_xlabel('Time')
-                    subplot.plot(timescale_data['Time'][start_x:end_x], timescale_data[key][start_x:end_x])
-                    plt.savefig(os.path.join(save_dir, name + '_' + key))
-                    plt.close()
+            for key in list(timescale_data.keys())[:-1]:
+                fig = plt.figure(figsize=(20, 15))
+                subplot = fig.add_subplot(111)
+                subplot.set_ylabel(key)
+                subplot.set_xlabel('Time')
+                subplot.plot(timescale_data['Time'][start_x:end_x], timescale_data[key][start_x:end_x])
+                plt.savefig(os.path.join(save_dir, name + '_' + key))
+                plt.close()
 
 
 
@@ -223,16 +239,10 @@ class SingleCkptAnalysis():
     def analyze(self):
         while True:
             sleep(self.check_frequency)
-            current_ckpt = os.listdir(self.ckpt_dir)
-            current_ckpt.sort()
-            current_ckpt = current_ckpt[-1]
-            current_ckpt_dir = os.path.join(self.ckpt_dir, current_ckpt)
-            current_ckpt_num = current_ckpt[10:]
+            _, current_ckpt_dir, current_ckpt_num = self.get_current_ckpt()
 
             if 'analysis-' + current_ckpt_num != self.latest_analysis:
-                year, month, day, hour, min, sec, _, _, _ = localtime()
-                min = min if len(str(min)) == 2 else '0' + str(min)
-                sec = sec if len(str(sec)) == 2 else '0' + str(sec)
+                year, month, day, hour, min, sec = get_current_time()
                 print('[INFO] FOUND A NEW CHECKPOINT: {} ({}/{}/{} {}:{}:{} EST)' \
                       .format(current_ckpt_num, month, day, year, hour, min, sec))
                 self.latest_analysis = 'analysis-' + current_ckpt_num
