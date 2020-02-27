@@ -6,3 +6,4 @@ NonsharedWeights*
 *.jpeg 
 *.txt
 *pycache*
+*.zip
