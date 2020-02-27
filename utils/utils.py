@@ -17,6 +17,30 @@ def read_csv(fname):
 
 
 
+def get_sorted_files(dir, keyword=None, add_parent=False):
+    if keyword:
+        fnames = glob(os.path.join(dir, keyword))
+        if not add_parent: fnames = [os.path.split(f)[1] for f in fnames]
+    else:
+        fnames = [os.path.join(dir, f) for f in os.listdir(dir)] if add_parent else os.listdir(dir)
+
+    fnames.sort()
+
+    return fnames
+
+
+
+def walk_and_search(root_dir, keyword):
+    fnames_all = []
+
+    for root, _, files in os.walk(root_dir):
+        fnames = get_sorted_files(root, keyword=keyword, add_parent=True)
+        fnames_all += fnames
+
+    return fnames_all
+
+
+
 def write_csv(fname, items, mode='w'):
     with open(fname, mode) as f:
         writer = csv.writer(f, delimiter=',')
@@ -41,18 +65,6 @@ def bytescale_patch_np(patch):
     patch = patch / (np.amax(patch) + 1e-6)
 
     return patch * 255
-
-
-def get_sorted_files(dir, keyword=None, add_parent=False):
-    if keyword:
-        fnames = glob(os.path.join(dir, keyword))
-        if not add_parent: fnames = [os.path.split(f)[1] for f in fnames]
-    else:
-        fnames = [os.path.join(dir, f) for f in os.listdir(dir)] if add_parent else os.listdir(dir)
-
-    fnames.sort()
-
-    return fnames
 
 
 def get_fraction_active(filename):
