@@ -4,6 +4,7 @@ from glob import glob
 import os
 import csv
 import pvtools as pv
+import torch
 
 
 def read_csv(fname):
@@ -15,6 +16,29 @@ def read_csv(fname):
 
     return items
 
+
+def check_if_dir_exists(directory, check_empty=False):
+    if os.path.isdir(directory):
+        exists = True
+        if check_empty and len(os.listdir(directory)) == 0:
+            exists = False
+    else:
+        exists = False
+
+    return exists
+
+
+def np_array_to_pt_tensor(array, use_cuda=True):
+    tensor = torch.from_numpy(array).float()
+
+    return tensor.cuda() if use_cuda else tensor
+
+
+def get_sparsity(tensor):
+    if type(tensor) == torch.Tensor:
+        return torch.mean((tensor == 0).float()).item()
+    elif type(tensor) == np.ndarray:
+        return np.mean(np.float32(tensor == 0))
 
 
 def get_sorted_files(dir, keyword=None, add_parent=False):
@@ -60,11 +84,15 @@ def get_current_time():
     return year, month, day, hour, min, sec
 
 
-def bytescale_patch_np(patch):
-    patch = patch - np.amin(patch)
-    patch = patch / (np.amax(patch) + 1e-6)
+def bytescale(tensor):
+    if type(tensor) == np.ndarray:
+        tensor = tensor - np.amin(tensor)
+        tensor = tensor / (np.amax(tensor) + 1e-6)
+    elif type(tensor) == torch.Tensor:
+        tensor = tensor - torch.min(tensor)
+        tensor = tensor / (torch.max(tensor) + 1e-6)
 
-    return patch * 255
+    return tensor * 255
 
 
 def get_fraction_active(filename):
