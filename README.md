@@ -1,1 +1,1 @@
-![](NAISys_2020.png)
+Poster presented at From Neuroscience to Artificially Intelligent Systems Conference at Cold Spring Harbor Laboratory on November 9, 2020 can be found [here](https://github.com/MichaelTeti/LCAvsSTRF/blob/master/NAISys_2020.pdf)
